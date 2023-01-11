@@ -1,5 +1,7 @@
 package com.megazone.springbootbackend.model;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +22,7 @@ public class TestUser {
     }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
     private String name;
 

@@ -21,7 +21,7 @@ public class TestController {
 
     @GetMapping("/")
     public String getTestName() {
-        TestUser testUser = new TestUser(1L, "ff");
+        TestUser testUser = new TestUser("ff");
         repository.save(testUser);
         return testUser.getName();
     }
