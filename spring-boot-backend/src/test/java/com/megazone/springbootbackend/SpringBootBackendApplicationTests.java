@@ -1,10 +1,10 @@
-package com.megazone.sandbox;
+package com.megazone.springbootbackend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SandboxApplicationTests {
+class SpringBootBackendApplicationTests {
 
 	@Test
 	void contextLoads() {

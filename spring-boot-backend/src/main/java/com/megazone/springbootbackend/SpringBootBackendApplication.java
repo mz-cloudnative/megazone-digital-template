@@ -1,13 +1,13 @@
-package com.megazone.sandbox;
+package com.megazone.springbootbackend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SandboxApplication {
+public class SpringBootBackendApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SandboxApplication.class, args);
+		SpringApplication.run(SpringBootBackendApplication.class, args);
 	}
 
 }
