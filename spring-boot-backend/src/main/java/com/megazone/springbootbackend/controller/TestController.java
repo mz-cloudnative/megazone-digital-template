@@ -3,9 +3,8 @@ package com.megazone.springbootbackend.controller;
 import com.megazone.springbootbackend.model.TestUser;
 import com.megazone.springbootbackend.repository.TestRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,6 +14,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/test")
 @RequiredArgsConstructor
+@Slf4j
 public class TestController {
 
     private final TestRepository repository;
