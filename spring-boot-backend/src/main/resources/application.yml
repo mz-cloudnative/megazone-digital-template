@@ -1,0 +1,17 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: spring-boot-backend
+  datasource:
+    url: jdbc:postgresql://localhost:5432/sample
+    username: postgres
+    password: 1234
+  h2:
+    console:
+      enabled: false
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
