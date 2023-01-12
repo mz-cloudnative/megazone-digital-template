@@ -23,12 +23,12 @@ public class SampleService {
 
     public List<SampleDataResponse> sampleDataList() {
         return sampleRepository.findAll().stream()
-                .map(SampleDataResponse::responseToEntity)
+                .map(SampleDataResponse::entityToResponse)
                 .collect(Collectors.toList());
     }
 
     public SampleDataResponse sampleData(Long sampleId) {
         final var sampleData = sampleRepository.findById(sampleId).orElseThrow(NullPointerException::new);
-        return SampleDataResponse.responseToEntity(sampleData);
+        return SampleDataResponse.entityToResponse(sampleData);
     }
 }

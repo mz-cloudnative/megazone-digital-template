@@ -24,7 +24,7 @@ public class SampleDataResponse {
     @Schema(description = "샘플등록시간")
     private LocalDateTime sampleRegDtt;
 
-    public static SampleDataResponse responseToEntity(SampleJpaEntity param){
+    public static SampleDataResponse entityToResponse(SampleJpaEntity param){
         return SampleDataResponse.builder()
                 .sampleId(param.getSampleId())
                 .sampleName(param.getSampleName())
