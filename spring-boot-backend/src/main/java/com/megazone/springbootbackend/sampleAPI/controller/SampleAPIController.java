@@ -49,7 +49,7 @@ public class SampleAPIController {
     }
 
     /**
-     * 3. Sample Select One API - [API02] Sample Select One
+     * 3. Sample Select One API - [API03] Sample Select One
      * 샘플 단건 조회 API
      * @param
      * @return
