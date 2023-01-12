@@ -13,5 +13,26 @@ spring:
       enabled: false
 
   jpa:
+    database: POSTGRESQL
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+    show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+
+  flyway:
+    locations: classpath:db/migration,classpath:db/seed
+    enabled: true
+    baseline-on-migrate: true
+    url: jdbc:postgresql://localhost:5432/sample
+    user: postgres
+    password: 1234
+    #out-of-order: true
+    #validate-on-migrate: true
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace
