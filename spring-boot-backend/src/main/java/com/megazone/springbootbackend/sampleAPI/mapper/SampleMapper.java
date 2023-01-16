@@ -49,7 +49,7 @@ public interface SampleMapper {
   @Results(id = "sampleMap", value = {
       @Result(property = "sampleId", column = "id"),
       @Result(property = "sampleName", column = "name"),
-      @Result(property = "sampleRegDtt", column = "regDtt")
+      @Result(property = "sampleRegDtt", column = "reg_dtt")
   })
   List<SampleJpaEntity> findAll();
 
