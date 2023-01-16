@@ -1,4 +1,4 @@
-DROP TABLE public.sample CASCADE;
+-- DROP TABLE public.sample CASCADE;
 
 create table sample (
    id int8 not null,

@@ -1,4 +1,4 @@
-DROP TABLE public.test_user CASCADE;
+-- DROP TABLE public.test_user CASCADE;
 
 CREATE TABLE public.test_user (
 	user_id bigserial NOT NULL,
