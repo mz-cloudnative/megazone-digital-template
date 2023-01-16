@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.megazone.springbootbackend.sampleAPI.mapper.SampleXmlMapper">
+  <resultMap id="sampleMap"
+    type="com.megazone.springbootbackend.sampleAPI.model.entity.SampleJpaEntity">
+    <result property="sampleId" column="id"/>
+    <result property="sampleName" column="name"/>
+    <result property="sampleRegDtt" column="regDtt"/>
+  </resultMap>
+  <select id="findByName" parameterType="String" resultMap="sampleMap">
+    select * from sample
+    where name like '%'||#{name}||'%'
+  </select>
+</mapper>
