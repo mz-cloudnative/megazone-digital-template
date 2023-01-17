@@ -1,0 +1,3 @@
+rootProject.name = 'megazone-digital-template'
+
+includ 'spring-boot-backend'
