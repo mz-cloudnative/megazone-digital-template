@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JpbDataSourceConfig">
+    <data-sources>
+      <data-source id="c9cdfe2d-b401-4969-a6a6-5e5036aa3085" name="megazone-digital-template" url="jdbc:postgresql://localhost/sample" driverClass="org.postgresql.Driver" />
+    </data-sources>
+  </component>
+</project>

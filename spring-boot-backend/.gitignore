@@ -1,6 +1,3 @@
-
-.idea/
-
 HELP.md
 .gradle
 build/
@@ -21,7 +18,8 @@ bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
-.idea
+.idea/
+.jpb/
 *.iws
 *.iml
 *.ipr
