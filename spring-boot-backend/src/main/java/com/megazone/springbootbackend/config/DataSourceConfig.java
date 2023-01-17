@@ -35,7 +35,6 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
  ***************************************************/
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = {"com.megazone.springbootbackend.repository","com.megazone.springbootbackend.sampleAPI.repository"})
 public class DataSourceConfig {
 
     private static final String PRIMARY = "primary";

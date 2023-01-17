@@ -67,7 +67,7 @@ public class SampleController {
 
     @Operation(summary = "[API04] Sample Select One ", description = "QuerlDSL 샘플")
     @GetMapping("/name-detail")
-    public @ResponseBody SampleData getTestName(@RequestParam("name") String name) {
+    public @ResponseBody SampleDataResponse getTestName(@RequestParam("name") String name) {
         return sampleService.getData(name);
     }
 }

@@ -15,4 +15,7 @@ public class SampleData {
     private String sampleName;
 
     private LocalDateTime sampleRegDtt;
+
+
+
 }
