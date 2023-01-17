@@ -7,9 +7,6 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.8-SNAPSHOT'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
-
-	//querydsl 추가
-//	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
 group = 'com.megazone'
@@ -20,6 +17,7 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
+	querydsl.extendsFrom compileClasspath
 }
 
 repositories {
@@ -63,13 +61,6 @@ def querydslDir = "$buildDir/generated/querydsl"
 
 sourceSets {
 	main.java.srcDir querydslDir
-}
-
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
-	querydsl.extendsFrom compileClasspath
 }
 
 tasks.named('test') {

@@ -6,7 +6,7 @@
     type="com.megazone.springbootbackend.sample.model.entity.SampleJpaEntity">
     <result property="sampleId" column="id"/>
     <result property="sampleName" column="name"/>
-    <result property="sampleRegDtt" column="regDtt"/>
+    <result property="sampleRegDtt" column="reg_dtt"/>
   </resultMap>
   <select id="findByName" parameterType="String" resultMap="sampleMap">
     select * from sample
