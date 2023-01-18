@@ -1,6 +1,7 @@
 package com.megazone.springbootbackend.sample.model.dto;
 
 
+import com.megazone.springbootbackend.sample.model.domain.SampleData;
 import com.megazone.springbootbackend.sample.model.entity.SampleJpaEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -30,5 +31,13 @@ public class SampleDataResponse {
                 .sampleName(param.getSampleName())
                 .sampleRegDtt(param.getSampleRegDtt())
                 .build();
+    }
+
+    public static SampleDataResponse domainToResponse(SampleData sampleData) {
+        return SampleDataResponse.builder()
+            .sampleId(sampleData.getSampleId())
+            .sampleName(sampleData.getSampleName())
+            .sampleRegDtt(sampleData.getSampleRegDtt())
+            .build();
     }
 }

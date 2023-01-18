@@ -36,7 +36,8 @@ public class SampleService {
         return SampleDataResponse.entityToResponse(sampleData);
     }
 
-    public SampleData getData(String name) {
-        return sampleCustomRepository.findAllByName(name);
+    public SampleDataResponse getData(String name) {
+        final var sampleData = sampleCustomRepository.findAllByName(name);
+        return SampleDataResponse.domainToResponse(sampleData);
     }
 }

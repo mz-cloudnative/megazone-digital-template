@@ -23,6 +23,7 @@ public class SampleCustomRepositoryImpl implements SampleCustomRepository {
     return jpaQueryFactory
         .select(Projections.constructor(SampleData.class, sampleEntity.sampleId, sampleEntity.sampleName, sampleEntity.sampleRegDtt))
         .from(sampleEntity)
-        .where(sampleEntity.sampleName.eq(name)).fetchOne();
+        .where(sampleEntity.sampleName.eq(name))
+        .fetchOne();
   }
 }
