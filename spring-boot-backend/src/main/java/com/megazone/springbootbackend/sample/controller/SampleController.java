@@ -9,14 +9,9 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/sample")
@@ -70,9 +65,31 @@ public class SampleController {
         return sampleData;
     }
 
+    /**
+     * 4. Sample Select One API - [API04] Sample QueryDsl Sample
+     * @param name
+     * @return
+     */
     @Operation(summary = "[API04] Sample Select One ", description = "QuerlDSL 샘플")
     @GetMapping("/name-detail")
     public @ResponseBody SampleDataResponse getTestName(@RequestParam("name") String name) {
         return sampleService.getData(name);
+    }
+
+    /**
+     * 5. Sample Redis API - [API05] Sample Redis Caching
+     * @param name
+     * @return
+     */
+    @Operation(summary = "[API05] Sample Redis Caching ", description = "Redis 샘플")
+    @Cacheable(key = "#name", value = "SampleDataResponse", cacheManager = "cacheManager") //, unless = "#name == ''", condition = "#name.length > 2"
+    @GetMapping("/redis-sample")
+    public @ResponseBody SampleDataResponse sampleRedisCaching(@RequestParam("name") String name) {
+        return sampleService.sampleRedisData(name);
+    }
+
+    @CacheEvict(value = "a", allEntries = true)
+    @DeleteMapping("/redis-sample-delete")
+    public void deleteAllEntries() {
     }
 }
