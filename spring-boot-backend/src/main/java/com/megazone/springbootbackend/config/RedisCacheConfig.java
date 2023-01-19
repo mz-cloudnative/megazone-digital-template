@@ -5,19 +5,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import java.time.Duration;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+@EnableCaching
 @Configuration
 public class RedisCacheConfig {
 
@@ -29,10 +31,9 @@ public class RedisCacheConfig {
 
   @Bean
   public RedisConnectionFactory redisConnectionFactory() {
-    return new LettuceConnectionFactory(new RedisStandaloneConfiguration(host, port));
+    return new LettuceConnectionFactory(host, port);
   }
 
-  @Bean
   public ObjectMapper objectMapper() {
     ObjectMapper mapper = new ObjectMapper();
     mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // timestamp 형식 안따르도록 설정
@@ -48,15 +49,19 @@ public class RedisCacheConfig {
     return jackson2JsonRedisSerializer;
   }
 
-  @Bean
-  public RedisCacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
-    RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
+  private RedisCacheConfiguration redisCacheDefaultConfiguration() {
+    return RedisCacheConfiguration.defaultCacheConfig()
         .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())) // key Serializer 변경
-        .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer())) // Value Serializer 변경
+        .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer()));// Value Serializer 변경
 //        .prefixCacheNameWith("Sample:") // CacheName prefix
-        .entryTtl(Duration.ofMillis(3L));// 캐시 수명 30분
+  }
+
+  @Bean
+  public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
+
     return RedisCacheManager.RedisCacheManagerBuilder
         .fromConnectionFactory(redisConnectionFactory)
-        .cacheDefaults(redisCacheConfiguration).build();
+        .cacheDefaults(redisCacheDefaultConfiguration())
+        .build();
   }
 }

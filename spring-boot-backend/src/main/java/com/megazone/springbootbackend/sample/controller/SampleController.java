@@ -81,8 +81,8 @@ public class SampleController {
      * @param name
      * @return
      */
+    @Cacheable(value = "sampleRedisCaching", key = "#name") //, unless = "#name == ''", condition = "#name.length > 2"
     @Operation(summary = "[API05] Sample Redis Caching ", description = "Redis 샘플")
-    @Cacheable(key = "#name", value = "SampleDataResponse", cacheManager = "cacheManager") //, unless = "#name == ''", condition = "#name.length > 2"
     @GetMapping("/redis-sample")
     public @ResponseBody SampleDataResponse sampleRedisCaching(@RequestParam("name") String name) {
         return sampleService.sampleRedisData(name);
