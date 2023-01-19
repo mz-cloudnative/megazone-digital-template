@@ -81,15 +81,9 @@ public class SampleController {
      * @param name
      * @return
      */
-    @Cacheable(value = "sampleRedisCaching", key = "#name") //, unless = "#name == ''", condition = "#name.length > 2"
     @Operation(summary = "[API05] Sample Redis Caching ", description = "Redis 샘플")
     @GetMapping("/redis-sample")
     public @ResponseBody SampleDataResponse sampleRedisCaching(@RequestParam("name") String name) {
         return sampleService.sampleRedisData(name);
-    }
-
-    @CacheEvict(value = "a", allEntries = true)
-    @DeleteMapping("/redis-sample-delete")
-    public void deleteAllEntries() {
     }
 }
