@@ -5,8 +5,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.cache.CacheProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -20,15 +26,36 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-@Configuration
+/***************************************************
+ * <ul>
+ * <li>업무 그룹명 : Redis 설정</li>
+ * <li>서브 업무명 : </li>
+ * <li>파  일  명 : CacheConfig</li>
+ * <li>작  성  자 : mz01-ohyunbk</li>
+ * <li>작  성  일 : 2023/01/19</li>
+ * <li>설     명 : yml설정만으로도 사용이 가능하나 커스텀을 위해 필요함.</li>
+ * </ul>
+ * <pre>
+ * ======================================
+ * 작성자             일시                  내용
+ * mz01-ohyunbk    2023/01/19 10:27 AM    최초 생성
+ * ======================================
+ * </pre>
+ ***************************************************/
+@RequiredArgsConstructor
 @EnableCaching
+@Configuration
+@EnableConfigurationProperties(value = {CacheProperties.class, RedisCacheCustomProperties.class})
 @EnableRedisRepositories
 public class RedisCacheConfig {
 
-  @Value("${spring.redis.host}")
+  private final CacheProperties cacheProperties;
+  private final RedisCacheCustomProperties redisCacheCustomProperties;
+
+  @Value("${spring.cache.redis.host}")
   private String host;
 
-  @Value("${spring.redis.port}")
+  @Value("${spring.cache.redis.port}")
   private int port;
 
   @Bean
@@ -52,18 +79,29 @@ public class RedisCacheConfig {
   }
 
   private RedisCacheConfiguration redisCacheDefaultConfiguration() {
-    return RedisCacheConfiguration.defaultCacheConfig()
+    return RedisCacheConfiguration
+        .defaultCacheConfig()
         .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())) // key Serializer 변경
-        .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer()));// Value Serializer 변경
-//        .prefixCacheNameWith("Sample:") // CacheName prefix
+        .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer()))// Value Serializer 변경
+        .entryTtl(cacheProperties.getRedis().getTimeToLive()); //기본 유효시간
+  }
+
+  private Map<String, RedisCacheConfiguration> redisCacheConfigurationMap() {
+    Map<String, RedisCacheConfiguration> cacheConfigurations = new HashMap<>();
+    for (Entry<String, Long> cacheNameAndTimeout : redisCacheCustomProperties.getTtl().entrySet()) {
+      cacheConfigurations
+          .put(cacheNameAndTimeout.getKey(), redisCacheDefaultConfiguration().entryTtl(
+              Duration.ofSeconds(cacheNameAndTimeout.getValue()))); //커스텀 유효시간
+    }
+    return cacheConfigurations;
   }
 
   @Bean
   public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
-
     return RedisCacheManager.RedisCacheManagerBuilder
         .fromConnectionFactory(redisConnectionFactory)
         .cacheDefaults(redisCacheDefaultConfiguration())
+        .withInitialCacheConfigurations(redisCacheConfigurationMap())
         .build();
   }
 }
