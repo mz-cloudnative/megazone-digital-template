@@ -4,12 +4,11 @@ package com.megazone.springbootbackend.sample.model.dto;
 import com.megazone.springbootbackend.sample.model.domain.SampleData;
 import com.megazone.springbootbackend.sample.model.entity.SampleJpaEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Builder
 @NoArgsConstructor
