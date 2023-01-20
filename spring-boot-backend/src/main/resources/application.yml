@@ -6,17 +6,17 @@ spring:
     name: spring-boot-backend
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/sample
-    username: postgres
-    password: 1234
+    url: jdbc:postgresql://localhost:5432/example
+    username: root
+    password: root
     connectionTestQuery: "SELECT 1"
     maximumPoolSize: 50
     minimumIdle: 50
   datasource-read-only:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/sample
-    username: postgres
-    password: 1234
+    url: jdbc:postgresql://localhost:5432/example
+    username: root
+    password: root
     connectionTestQuery: "SELECT 1"
     maximumPoolSize: 50
     minimumIdle: 50
@@ -39,11 +39,12 @@ spring:
     locations: classpath:db/migration,classpath:db/seed
     enabled: false
     baseline-on-migrate: true
-    url: jdbc:postgresql://localhost:5432/sample
+    url: jdbc:postgresql://localhost:5432/example
     user: postgres
     password: 1234
     #out-of-order: true
     #validate-on-migrate: true
+
   cache:
     type: redis
     redis:
@@ -64,4 +65,3 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
-
