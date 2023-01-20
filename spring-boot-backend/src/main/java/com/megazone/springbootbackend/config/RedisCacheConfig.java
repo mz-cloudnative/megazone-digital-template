@@ -109,12 +109,13 @@ public class RedisCacheConfig {
 
   @Bean
   public RedisTemplate<?, ?> redisTemplate() {
-    RedisTemplate<byte[], RedisCacheConfiguration> redisTemplate = new RedisTemplate<>();
+    RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<>();
     redisTemplate.setConnectionFactory(redisConnectionFactory());
     redisTemplate.setKeySerializer(new StringRedisSerializer());
     redisTemplate.setValueSerializer(jackson2JsonRedisSerializer());
     redisTemplate.setDefaultSerializer(new GenericJackson2JsonRedisSerializer());
     redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
+    redisTemplate.afterPropertiesSet();
     return redisTemplate;
   }
 }
