@@ -5,9 +5,9 @@ spring:
   application:
     name: spring-boot-backend
   datasource:
-    url: jdbc:postgresql://localhost:5432/sample
+    url: jdbc:postgresql://localhost:5432/
     username: postgres
-    password: 1234
+    password: russia387
   h2:
     console:
       enabled: false
@@ -26,11 +26,13 @@ spring:
     locations: classpath:db/migration,classpath:db/seed
     enabled: true
     baseline-on-migrate: true
-    url: jdbc:postgresql://localhost:5432/sample
+    url: jdbc:postgresql://localhost:5432/
     user: postgres
-    password: 1234
+    password: russia387
     #out-of-order: true
-    #validate-on-migrate: true
+    validate-on-migrate: true
+    validate-migration-naming: true
+
 
 logging:
   level:

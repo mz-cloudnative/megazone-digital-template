@@ -1,0 +1,47 @@
+CREATE TABLE clubs (
+    id VARCHAR(256) PRIMARY KEY,
+    "name" VARCHAR(40) NOT NULL,
+    abbr VARCHAR(4) NOT NULL,
+    stadium VARCHAR(50) NOT NULL,
+    website VARCHAR(300) NOT NULL,
+    status BOOLEAN NOT NULL DEFAULT TRUE
+);
+
+CREATE TABLE ranks (
+    club VARCHAR(256) NOT NULL,
+    rank INTEGER NOT NULL,
+    win INTEGER NOT NULL DEFAULT 0,
+    draw INTEGER NOT NULL DEFAULT 0,
+    lose INTEGER NOT NULL DEFAULT 0,
+    gf INTEGER NOT NULL DEFAULT 0,
+    ga INTEGER NOT NULL DEFAULT 0,
+    gd INTEGER NOT NULL DEFAULT 0,
+    point INTEGER NOT NULL DEFAULT 0,
+    CONSTRAINT pk_ranks PRIMARY KEY (club),
+    CONSTRAINT fk_ranks_club FOREIGN KEY (club) REFERENCES clubs (id)
+);
+
+CREATE TABLE players (
+    id VARCHAR(256) NOT NULL,
+    back_number INTEGER NOT NULL,
+    club VARCHAR(256) NOT NULL,
+    "name" VARCHAR(40) NOT NULL,
+    nationality VARCHAR(30) NOT NULL,
+    "position" VARCHAR(12) NOT NULL,
+    joined TIMESTAMP NOT NULL,
+    birth TIMESTAMP NOT NULL,
+    CONSTRAINT pk_players PRIMARY KEY (id),
+    CONSTRAINT fk_players_club FOREIGN KEY (club) REFERENCES clubs (id)
+);
+
+CREATE TABLE staffs (
+    id VARCHAR(256) NOT NULL,
+    club VARCHAR(256) NOT NULL,
+    "name" VARCHAR(40) NOT NULL,
+    "role" VARCHAR(30) NOT NULL,
+    nationality VARCHAR(30) NOT NULL,
+    joined TIMESTAMP NOT NULL,
+    birth TIMESTAMP NOT NULL,
+    CONSTRAINT pk_staffs PRIMARY KEY (id),
+    CONSTRAINT fk_staffs_club FOREIGN KEY (club) REFERENCES clubs (id)
+);

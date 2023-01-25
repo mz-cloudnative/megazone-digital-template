@@ -1,5 +1,3 @@
-DROP TABLE public.sample CASCADE;
-
 create table sample (
    id int8 not null,
     name varchar(255) not null,
