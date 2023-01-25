@@ -1,17 +1,15 @@
 package com.megazone.springbootbackend.util;
 
-import java.util.LinkedHashMap;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class RedisUtils {
+
   private final RedisTemplate<String, Object> redisTemplate;
-  private final ModelMapper modelMapper;
 
   public void put(String key, Object value, Long expirationTime){
     if(expirationTime != null){
@@ -28,11 +26,7 @@ public class RedisUtils {
   public <T> T get(String key, Class<T> clazz){
     Object o = redisTemplate.opsForValue().get(key);
     if(o != null) {
-      if(o instanceof LinkedHashMap){
-        return modelMapper.map(o, clazz);
-      }else{
-        return clazz.cast(o);
-      }
+      return clazz.cast(o);
     }
     return null;
   }
