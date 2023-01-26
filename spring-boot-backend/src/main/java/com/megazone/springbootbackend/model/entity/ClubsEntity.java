@@ -27,4 +27,7 @@ public class ClubsEntity {
 
     @Column(name = "website", nullable = false)
     private String website;
+
+    @Column(name = "status", nullable = false)
+    private boolean status;
 }

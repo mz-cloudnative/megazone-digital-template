@@ -1,7 +1,9 @@
 package com.megazone.springbootbackend.controller;
 
 import com.megazone.springbootbackend.model.dto.ClubAddDto;
+import com.megazone.springbootbackend.model.dto.ClubModifiedDto;
 import com.megazone.springbootbackend.model.request.ClubAddRequest;
+import com.megazone.springbootbackend.model.request.ClubModifiedRequest;
 import com.megazone.springbootbackend.model.response.FirstClubResponse;
 import com.megazone.springbootbackend.service.ClubService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,6 +25,20 @@ public class ManagerController {
         return clubService.selectFirstClub(name);
     }
 
+    @PutMapping("/club")
+    @Operation(description = "클럽 업데이트")
+    public void modifyTeam(@RequestBody ClubModifiedRequest request) {
+        ClubModifiedDto club = ClubModifiedDto.builder()
+                .id(request.getId())
+                .name(request.getName())
+                .abbr(request.getAbbr())
+                .website(request.getWebsite())
+                .stadium(request.getStadium())
+                .status(request.isStatus())
+                .build();
+        clubService.updateClubs(club);
+    }
+
     @GetMapping("/clubs")
     @Operation(description = "1부리그 팀들 가져오기")
     public List<FirstClubResponse> getFirstClubs() {
@@ -38,6 +54,7 @@ public class ManagerController {
                     .stadium(req.getStadium())
                     .abbr(req.getAbbr())
                     .name(req.getName())
+                    .status(req.getStatus())
                     .build();
         }).collect(Collectors.toList());
         clubService.insertClubs(clubDtos);

@@ -5,10 +5,11 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class ClubAddDto {
+public class ClubModifiedDto {
+    private String id;
     private String name;
     private String abbr;
     private String stadium;
     private String website;
-    private String status;
+    private boolean status;
 }

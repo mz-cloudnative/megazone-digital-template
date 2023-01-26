@@ -8,4 +8,5 @@ public class ClubAddRequest {
     String abbr;
     String stadium;
     String url;
+    String status;
 }
