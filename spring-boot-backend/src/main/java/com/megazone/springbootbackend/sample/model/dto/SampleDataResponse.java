@@ -9,11 +9,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
+@Getter @Setter
 public class SampleDataResponse {
     @Schema(description = "샘플아이디")
     private Long sampleId;

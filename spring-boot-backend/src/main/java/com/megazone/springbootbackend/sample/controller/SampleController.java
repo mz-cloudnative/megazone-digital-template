@@ -9,9 +9,14 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/sample")
@@ -45,8 +50,7 @@ public class SampleController {
     @Operation(summary = "[API02] Sample Select List ", description = "샘플 목록 조회 API")
     @GetMapping(value = "/sample-list", produces = "application/json")
     public List<SampleDataResponse> sampleList(){
-        final var sampleList = sampleService.sampleDataList();
-        return sampleList;
+        return sampleService.sampleDataList();
     }
 
     /**
@@ -61,8 +65,7 @@ public class SampleController {
             @Parameter(description = "샘플번호")
             @PathVariable(value = "sampleId")
             @NotNull final Long sampleId){
-        final var sampleData = sampleService.sampleData(sampleId);
-        return sampleData;
+        return sampleService.sampleData(sampleId);
     }
 
     /**
@@ -74,16 +77,5 @@ public class SampleController {
     @GetMapping("/name-detail")
     public @ResponseBody SampleDataResponse getTestName(@RequestParam("name") String name) {
         return sampleService.getData(name);
-    }
-
-    /**
-     * 5. Sample Redis API - [API05] Sample Redis Caching
-     * @param name
-     * @return
-     */
-    @Operation(summary = "[API05] Sample Redis Caching ", description = "Redis 샘플")
-    @GetMapping("/redis-sample")
-    public @ResponseBody SampleDataResponse sampleRedisCaching(@RequestParam("name") String name) {
-        return sampleService.sampleRedisData(name);
     }
 }

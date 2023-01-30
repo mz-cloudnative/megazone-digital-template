@@ -60,6 +60,13 @@ dependencies {
 
 	//P6Spy 쿼리 조회시 ? 값 바인딩
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.1'
+
+	//object 간 변환 처리
+	implementation 'org.modelmapper:modelmapper:3.1.1'
+
+	//TestContainers 관련(단위테스트)
+	//testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
+	//testImplementation("org.testcontainers:junit-jupiter:1.17.6")
 }
 
 // QueryDSL 추가
