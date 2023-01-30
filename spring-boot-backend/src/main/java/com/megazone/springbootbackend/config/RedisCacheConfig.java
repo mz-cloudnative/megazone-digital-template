@@ -54,10 +54,10 @@ public class RedisCacheConfig {
   private final CacheProperties cacheProperties;
   private final RedisCacheCustomProperties redisCacheCustomProperties;
 
-  @Value("${spring.cache.redis.host}")
+  @Value("${spring.redis.host}")
   private String host;
 
-  @Value("${spring.cache.redis.port}")
+  @Value("${spring.redis.port}")
   private int port;
 
   @Bean

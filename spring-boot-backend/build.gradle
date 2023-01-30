@@ -65,8 +65,8 @@ dependencies {
 	implementation 'org.modelmapper:modelmapper:3.1.1'
 
 	//TestContainers 관련(단위테스트)
-	//testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
-	//testImplementation("org.testcontainers:junit-jupiter:1.17.6")
+	testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
+	testImplementation("org.testcontainers:junit-jupiter:1.17.6")
 }
 
 // QueryDSL 추가

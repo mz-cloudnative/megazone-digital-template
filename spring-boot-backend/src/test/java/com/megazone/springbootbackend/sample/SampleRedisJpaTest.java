@@ -1,4 +1,4 @@
-package com.megazone.springbootbackend.sample.service;
+package com.megazone.springbootbackend.sample;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -16,12 +16,13 @@ import org.springframework.boot.test.autoconfigure.data.redis.DataRedisTest;
 
 /***************************************************
  * <ul>
- * <li>업무 그룹명 : </li>
+ * <li>업무 그룹명 : Redis JPA 테스트 샘플 </li>
  * <li>서브 업무명 : </li>
- * <li>파  일  명 : SampleServiceTest</li>
+ * <li>파  일  명 : SampleRedisJpaTest</li>
  * <li>작  성  자 : mz01-ohyunbk</li>
  * <li>작  성  일 : 2023/01/19</li>
- * <li>설     명 : </li>
+ * <li>설     명 : DataRedisTest 어노테이션을 사용하여 전체 SpringBoot를 띄우지 않고 redis 관련만 테스트</li>
+ * </li>          Testcontainers 라이브러리를 사용하여 로컬에서 redis 구동없이 테스트코드만으로 테스트 가능.</li>
  * </ul>
  * <pre>
  * ======================================
@@ -33,7 +34,7 @@ import org.springframework.boot.test.autoconfigure.data.redis.DataRedisTest;
 @DataRedisTest
 @TestMethodOrder(value = MethodOrderer.OrderAnnotation.class) //@Order에 의해 메소드별 실행순서 보장
 @DisplayName("Redis JPA 테스트")
-class SampleRedisServiceTest {
+class SampleRedisJpaTest extends AbstractContainerBaseTest {
 
   @Autowired
   private SampleRedisRepository sampleRedisRepository;

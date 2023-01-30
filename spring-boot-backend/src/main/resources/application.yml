@@ -44,13 +44,14 @@ spring:
     password: 1234
     #out-of-order: true
     #validate-on-migrate: true
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
 
   cache:
     type: redis
     redis:
       time-to-live: 60000 #60초
-      host: localhost
-      port: 6379
       expire-time:
         ttl:
           user: 30
