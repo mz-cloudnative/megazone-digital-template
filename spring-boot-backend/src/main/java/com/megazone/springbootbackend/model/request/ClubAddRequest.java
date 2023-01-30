@@ -7,6 +7,6 @@ public class ClubAddRequest {
     String name;
     String abbr;
     String stadium;
-    String url;
+    String website;
     String status;
 }

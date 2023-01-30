@@ -12,7 +12,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -83,6 +82,24 @@ public class ClubServiceImpl implements ClubService {
 
     // HQL 이용
     @Override
+    public List<FirstClubResponse> selectAllFirstClub() {
+        Session session = sessionFactory.openSession();
+        String hql = "select c from ClubsEntity c";
+        List<ClubsEntity> list = session.createQuery(hql).list();
+        session.close();
+        return list.stream().map(clubsEntity -> {
+            return FirstClubResponse.builder()
+                    .id(clubsEntity.getId())
+                    .name(clubsEntity.getName())
+                    .abbr(clubsEntity.getAbbr())
+                    .stadium(clubsEntity.getStadium())
+                    .website(clubsEntity.getWebsite())
+                    .status(clubsEntity.isStatus())
+                    .build();
+        }).collect(Collectors.toList());
+    }
+
+    @Override
     public void updateClubs(ClubModifiedDto club) {
         Session session = sessionFactory.openSession();
         String hql = "update ClubsEntity set name = :name, abbr = :abbr, website = :website, stadium = :stadium, status = :status where id like :id";
@@ -94,5 +111,6 @@ public class ClubServiceImpl implements ClubService {
                 .setParameter("stadium", club.getStadium())
                 .setParameter("status", club.isStatus())
                 .executeUpdate();
+        session.close();
     }
 }

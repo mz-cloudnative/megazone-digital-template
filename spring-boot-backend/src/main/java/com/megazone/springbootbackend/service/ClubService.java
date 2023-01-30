@@ -15,4 +15,6 @@ public interface ClubService {
 
     // HQL 이용
     void updateClubs(ClubModifiedDto club);
+
+    List<FirstClubResponse> selectAllFirstClub();
 }

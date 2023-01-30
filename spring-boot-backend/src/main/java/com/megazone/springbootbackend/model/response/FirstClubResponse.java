@@ -11,4 +11,5 @@ public class FirstClubResponse {
     private String abbr;
     private String stadium;
     private String website;
+    private boolean status;
 }

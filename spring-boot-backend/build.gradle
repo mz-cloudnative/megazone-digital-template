@@ -1,6 +1,6 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '2.7.7'
+	id 'org.springframework.boot' version '2.7.7' // Spring boot 3 버전부터는 Java 11 버전을 지원을 안 한다.
 	id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 }
@@ -9,7 +9,7 @@ group = 'com.megazone'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
-def querydslDir = "$buildDir/generated/querydsl"
+def querydslDir = "$buildDir/generated/querydsl" // querydsl 경로 지정
 
 configurations {
 	compileOnly {
@@ -23,8 +23,8 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator' // Spring Boot 모니터링 도구
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // Spring Data JPA
 	implementation 'com.querydsl:querydsl-apt:5.0.0'
 	implementation 'com.querydsl:querydsl-jpa:5.0.0'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
