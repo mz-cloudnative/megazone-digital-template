@@ -6,17 +6,17 @@ spring:
     name: spring-boot-backend
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/example
-    username: root
-    password: root
+    url: jdbc:postgresql://localhost:5432/sample
+    username: postgres
+    password: 1234
     connectionTestQuery: "SELECT 1"
     maximumPoolSize: 50
     minimumIdle: 50
   datasource-read-only:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/example
-    username: root
-    password: root
+    url: jdbc:postgresql://localhost:5432/sample
+    username: postgres
+    password: 1234
     connectionTestQuery: "SELECT 1"
     maximumPoolSize: 50
     minimumIdle: 50
@@ -48,7 +48,7 @@ spring:
   cache:
     type: redis
     redis:
-      time-to-live: 60000
+      time-to-live: 60000 #60초
       host: localhost
       port: 6379
       expire-time:
