@@ -1,4 +1,4 @@
-package com.megazone.springbootbackend.config;
+package com.megazone.springbootbackend.communityAPI.config;
 
 import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;

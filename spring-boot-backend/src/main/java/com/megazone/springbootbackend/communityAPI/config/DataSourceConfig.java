@@ -1,4 +1,4 @@
-package com.megazone.springbootbackend.config;
+package com.megazone.springbootbackend.communityAPI.config;
 
 import com.zaxxer.hikari.HikariDataSource;
 import java.util.HashMap;
