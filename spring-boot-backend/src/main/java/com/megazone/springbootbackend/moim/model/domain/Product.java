@@ -1,26 +1,24 @@
 package com.megazone.springbootbackend.moim.model.domain;
 
-public enum Product {
-  MOIM("MOIM"),   // 모임
-  STUDYROOM("STUDYROOM"), // 스터디룸
-  FREE("FREE"); // 프리
+import java.time.LocalDateTime;
+import lombok.*;
 
-  String part;
+@Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class Product {
 
-  Product(String part) {
-    this.part = part;
-  }
+  private Long productId;
 
-  public static Product valueOfProduct(final String part) {
-    for (var value : values()) {
-      if (value.part.equals(part)) {
-        return value;
-      }
-    }
-    return null;
-  }
+  private String productName;
 
-  public String getPart() {
-    return part;
-  }
+  private int productPrice;
+
+  private String productPart;
+
+  private LocalDateTime createDtt;
+
+  private LocalDateTime updateDtt;
 }
