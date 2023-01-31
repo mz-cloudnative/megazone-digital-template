@@ -27,7 +27,7 @@ public class MoimStudyRoomEntity {
   @Column(name = "create_datetime", nullable = false)
   private LocalDateTime createDtt;
 
-  @Column(name = "create_datetime", nullable = false)
+  @Column(name = "update_datetime", nullable = false)
   private LocalDateTime updateDtt;
 
   @Column(name = "room_status", nullable = false)

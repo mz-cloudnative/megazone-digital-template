@@ -32,7 +32,7 @@ public class MoimDetailEntity {
   @Column(name = "create_datetime", nullable = false)
   private LocalDateTime createDtt;
 
-  @Column(name = "create_datetime", nullable = false)
+  @Column(name = "update_datetime", nullable = false)
   private LocalDateTime updateDtt;
 
 }
