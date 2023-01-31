@@ -1,9 +1,11 @@
 package com.megazone.springbootbackend.moim.model.dto;
 
 import com.megazone.springbootbackend.moim.model.domain.Status;
+import com.megazone.springbootbackend.moim.model.entity.MoimDetailEntity;
 import com.megazone.springbootbackend.moim.model.entity.MoimEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.*;
 
 @Builder
@@ -24,6 +26,9 @@ public class MoimResponse {
   @Schema(description = "모임 상태")
   private Status moimStatus;
 
+  @Schema(description = "모임 세부정보")
+  private List<MoimDetailEntity> moimDetailEntityList;
+
   public static MoimResponse fromEntity(MoimEntity moimEntity) {
     return MoimResponse.builder()
         .moimId(moimEntity.getMoimId())
@@ -31,6 +36,7 @@ public class MoimResponse {
         .createDtt(moimEntity.getCreateDtt())
         .updateDtt(moimEntity.getUpdateDtt())
         .moimStatus(moimEntity.getMoimStatus())
+        .moimDetailEntityList(moimEntity.getMoimDetailEntity())
         .build();
   }
 }
