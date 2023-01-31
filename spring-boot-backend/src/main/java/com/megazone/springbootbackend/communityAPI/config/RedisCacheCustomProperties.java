@@ -1,4 +1,4 @@
-package com.megazone.springbootbackend.config;
+package com.megazone.springbootbackend.communityAPI.config;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -35,6 +35,7 @@ dependencies {
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.boot:spring-boot-starter-cache'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -95,10 +96,6 @@ sourceSets {
 tasks.named('test') {
 	useJUnitPlatform()
 }
-
-
-//querydsl 사용 경로
-def querydslDir = "$buildDir/generated/querydsl"
 
 //querydsl 사용 설정
 querydsl {
