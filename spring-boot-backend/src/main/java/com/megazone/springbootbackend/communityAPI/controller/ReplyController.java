@@ -17,7 +17,7 @@ public class ReplyController {
     private final ReplyService replyService;
 
     @GetMapping(value = "/replies/{articleId}")
-    public List<Reply> findAllRepliesByArticleId(@PathVariable("articleId") Long articleId) {
+    public List<ReplyDto> findAllRepliesByArticleId(@PathVariable("articleId") Long articleId) {
         return replyService.findReplyByArticleId(articleId);
     }
 

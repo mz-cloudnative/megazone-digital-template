@@ -10,7 +10,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,15 +25,9 @@ public class ReplyService {
     private final UserRepository userRepository;
     private final ArticleRepository articleRepository;
 
-    List<ReplyDto> list2;
-
-    public List<Reply> findReplyByArticleId(Long articleId){
+    public List<ReplyDto> findReplyByArticleId(Long articleId){
         List<Reply> list=replyRepository.findReplyByArticleId(articleId);
-
-//        for(Reply i : list){
-//            list2.add(ReplyDto.of(i));
-//        }
-        return list;
+        return convertNestedStructure(list);
     }
 
     public void createReply(ReplyCreateRequestDto requestDto){
@@ -40,6 +38,20 @@ public class ReplyService {
                         requestDto.getParentId() != null ?
                         replyRepository.findById(requestDto.getParentId()).orElseThrow(NullPointerException::new):null)
         );
+    }
+
+    private List<ReplyDto> convertNestedStructure(List<Reply> replies){
+        List<ReplyDto> result = new ArrayList<>();
+        Map<Long, ReplyDto> map = new HashMap<>();
+        replies.stream().forEach(r -> {
+            ReplyDto dto = ReplyDto.toDto(r);
+            map.put(dto.getReplyId(), dto);
+            if(r.getParent()!=null)
+                map.get(r.getParent().getReplyId()).getChildren().add(dto);
+            else
+                result.add(dto);
+        });
+        return result;
     }
 
 

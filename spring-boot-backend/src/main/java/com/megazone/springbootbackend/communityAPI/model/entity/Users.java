@@ -2,6 +2,7 @@ package com.megazone.springbootbackend.communityAPI.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Users {
 
     public Users(String username) {
@@ -42,6 +44,7 @@ public class Users {
 
     @ManyToMany
     @JsonBackReference
+    @JsonIgnore
     @JoinTable(
             name = "user_authority",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
@@ -49,14 +52,17 @@ public class Users {
     private Set<Authority> authorities;
 
     @JsonBackReference
+    @JsonIgnore
     @OneToMany(mappedBy = "users", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Token> tokens;
 
     @JsonBackReference
+    @JsonIgnore
     @OneToMany(mappedBy = "users", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Article> articles;
 
     @JsonBackReference
+    @JsonIgnore
     @OneToMany(mappedBy = "users", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Reply> replies;
 

@@ -27,11 +27,11 @@ public class ReplyDto {
         this.nickname = nickname;
     }
 
-    public static ReplyDto of(Reply reply){
-        return ReplyDto.builder().replyId(reply.getReplyId())
-                .content(reply.getContent())
-                .userId(reply.getUsers().getUserId())
-                .nickname(reply.getUsers().getNickname()).build();
+    public static ReplyDto toDto(Reply reply){
+        return new ReplyDto(reply.getReplyId(),
+                reply.getContent(),
+                reply.getUsers().getUserId(),
+                reply.getUsers().getNickname());
     }
 
 }
