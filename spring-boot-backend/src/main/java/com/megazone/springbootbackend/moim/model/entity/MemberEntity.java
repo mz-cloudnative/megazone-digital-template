@@ -1,6 +1,5 @@
 package com.megazone.springbootbackend.moim.model.entity;
 
-import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -14,7 +13,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "members")
-public class MemberEntity {
+public class MemberEntity extends BaseTimeEntity{
 
   @Id
   @Column(name = "member_id", nullable = false)
@@ -23,10 +22,9 @@ public class MemberEntity {
   @Column(name = "member_name", nullable = false)
   private String memberName;
 
-  @Column(name = "create_datetime", nullable = false)
-  private LocalDateTime createDtt;
-
-  @Column(name = "update_datetime", nullable = false)
-  private LocalDateTime updateDtt;
-
+//  @Column(name = "create_datetime", nullable = false)
+//  private LocalDateTime createDtt;
+//
+//  @Column(name = "update_datetime", nullable = false)
+//  private LocalDateTime updateDtt;
 }
