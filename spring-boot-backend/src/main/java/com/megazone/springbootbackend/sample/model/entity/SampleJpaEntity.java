@@ -1,6 +1,12 @@
-package com.megazone.springbootbackend.sampleAPI.model.entity;
+package com.megazone.springbootbackend.sample.model.entity;
 
-import com.megazone.springbootbackend.sampleAPI.model.dto.SampleDataRequest;
+import com.megazone.springbootbackend.sample.model.dto.SampleDataRequest;
+import javax.persistence.Embedded;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import lombok.*;
 
 import javax.persistence.Column;

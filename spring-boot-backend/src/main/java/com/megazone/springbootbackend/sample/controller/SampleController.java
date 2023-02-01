@@ -1,22 +1,28 @@
-package com.megazone.springbootbackend.sampleAPI.controller;
+package com.megazone.springbootbackend.sample.controller;
 
-import com.megazone.springbootbackend.sampleAPI.model.dto.SampleDataRequest;
-import com.megazone.springbootbackend.sampleAPI.model.dto.SampleDataResponse;
-import com.megazone.springbootbackend.sampleAPI.service.SampleService;
+import com.megazone.springbootbackend.sample.model.dto.SampleDataRequest;
+import com.megazone.springbootbackend.sample.model.dto.SampleDataResponse;
+import com.megazone.springbootbackend.sample.service.SampleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import java.util.List;
+import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.constraints.NotNull;
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/sample")
 @RequiredArgsConstructor
 @Slf4j
-public class SampleAPIController {
+public class SampleController {
 
     private final SampleService sampleService;
 
@@ -44,8 +50,7 @@ public class SampleAPIController {
     @Operation(summary = "[API02] Sample Select List ", description = "샘플 목록 조회 API")
     @GetMapping(value = "/sample-list", produces = "application/json")
     public List<SampleDataResponse> sampleList(){
-        final var sampleList = sampleService.sampleDataList();
-        return sampleList;
+        return sampleService.sampleDataList();
     }
 
     /**
@@ -60,7 +65,17 @@ public class SampleAPIController {
             @Parameter(description = "샘플번호")
             @PathVariable(value = "sampleId")
             @NotNull final Long sampleId){
-        final var sampleData = sampleService.sampleData(sampleId);
-        return sampleData;
+        return sampleService.sampleData(sampleId);
+    }
+
+    /**
+     * 4. Sample Select One API - [API04] Sample QueryDsl Sample
+     * @param name
+     * @return
+     */
+    @Operation(summary = "[API04] Sample Select One ", description = "QuerlDSL 샘플")
+    @GetMapping("/name-detail")
+    public @ResponseBody SampleDataResponse getTestName(@RequestParam("name") String name) {
+        return sampleService.getData(name);
     }
 }

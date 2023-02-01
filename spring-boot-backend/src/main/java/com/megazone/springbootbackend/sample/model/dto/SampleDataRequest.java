@@ -1,4 +1,4 @@
-package com.megazone.springbootbackend.sampleAPI.model.dto;
+package com.megazone.springbootbackend.sample.model.dto;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;

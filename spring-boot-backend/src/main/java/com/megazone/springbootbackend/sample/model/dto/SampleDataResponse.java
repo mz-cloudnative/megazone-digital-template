@@ -1,19 +1,20 @@
-package com.megazone.springbootbackend.sampleAPI.model.dto;
+package com.megazone.springbootbackend.sample.model.dto;
 
 
-import com.megazone.springbootbackend.sampleAPI.model.entity.SampleJpaEntity;
+import com.megazone.springbootbackend.sample.model.domain.SampleData;
+import com.megazone.springbootbackend.sample.model.entity.SampleJpaEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
+import lombok.Setter;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
+@Getter @Setter
 public class SampleDataResponse {
     @Schema(description = "샘플아이디")
     private Long sampleId;
@@ -30,5 +31,13 @@ public class SampleDataResponse {
                 .sampleName(param.getSampleName())
                 .sampleRegDtt(param.getSampleRegDtt())
                 .build();
+    }
+
+    public static SampleDataResponse domainToResponse(SampleData sampleData) {
+        return SampleDataResponse.builder()
+            .sampleId(sampleData.getSampleId())
+            .sampleName(sampleData.getSampleName())
+            .sampleRegDtt(sampleData.getSampleRegDtt())
+            .build();
     }
 }
