@@ -110,9 +110,9 @@ public class RedisCacheConfig {
   }
 
   @Bean
-  public RedisTemplate<Object, Object> redisTemplate() {
+  public RedisTemplate<String, Object> redisTemplate() {
     //Redis JPA, RedisTemplate으로 캐싱처리 할 때 사용되는 설정
-    RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<>();
+    RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
     redisTemplate.setConnectionFactory(redisConnectionFactory());
     redisTemplate.setKeySerializer(new StringRedisSerializer());
     redisTemplate.setValueSerializer(jackson2JsonRedisSerializer());
