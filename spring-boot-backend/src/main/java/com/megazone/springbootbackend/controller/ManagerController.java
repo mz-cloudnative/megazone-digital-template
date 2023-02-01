@@ -1,12 +1,11 @@
 package com.megazone.springbootbackend.controller;
 
-import com.megazone.springbootbackend.model.dto.*;
+import com.megazone.springbootbackend.model.dto.ClubAddDto;
+import com.megazone.springbootbackend.model.dto.ClubModifiedDto;
 import com.megazone.springbootbackend.model.request.ClubAddRequest;
 import com.megazone.springbootbackend.model.request.ClubModifiedRequest;
 import com.megazone.springbootbackend.model.request.PlayerAddRequest;
-import com.megazone.springbootbackend.model.request.PlayerModifiedRequest;
 import com.megazone.springbootbackend.model.response.FirstClubResponse;
-import com.megazone.springbootbackend.model.response.PlayerResponse;
 import com.megazone.springbootbackend.service.ClubService;
 import com.megazone.springbootbackend.service.PlayerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -70,51 +69,9 @@ public class ManagerController {
         clubService.insertClubs(clubDtos);
     }
 
-    @GetMapping("/player")
-    @Operation(description = "선수 조회")
-    public PlayerResponse findPlayer(@RequestParam String name) {
-        PlayerSelectDto dto = playerService.selectPlayer(name);
-        return PlayerResponse.builder()
-                .id(dto.getId())
-                .backNumber(dto.getBackNumber())
-                .name(dto.getName())
-                .clubId(dto.getClubId())
-                .clubName(dto.getClubName())
-                .nationality(dto.getNationality())
-                .position(dto.getPosition())
-                .joined(dto.getJoined())
-                .birth(dto.getBirth())
-                .build();
-    }
-
     @PostMapping("/player")
     @Operation(description = "선수 등록")
     public void addPlayer(@RequestBody PlayerAddRequest request) {
-        playerService.addPlayer(
-                PlayerAddDto.builder()
-                        .name(request.getName())
-                        .backNumber(request.getBackNumber())
-                        .clubId(request.getClubId())
-                        .nationality(request.getNationality())
-                        .position(request.getPosition())
-                        .joined(request.getJoined())
-                        .birth(request.getBirth())
-                        .build()
-        );
-    }
-
-    @PutMapping("/player")
-    @Operation(description = "선수 업데이트")
-    public void updatePlayer(@RequestBody PlayerModifiedRequest request) {
-        playerService.updatePlayer(PlayerModifyDto.builder()
-                        .id(request.getId())
-                        .backNumber(request.getBackNumber())
-                        .club(request.getClub())
-                        .name(request.getName())
-                        .nationality(request.getNationality())
-                        .position(request.getPosition())
-                        .joined(request.getJoined())
-                        .birth(request.getBirth())
-                        .build());
+        playerService.addPlayer();
     }
 }
