@@ -30,8 +30,8 @@ public class StaffsEntity {
     private String nationality;
 
     @Column(name = "joined", nullable = false)
-    private Date joined;
+    private String joined;
 
     @Column(name = "birth", nullable = false)
-    private Date birth;
+    private String birth;
 }
