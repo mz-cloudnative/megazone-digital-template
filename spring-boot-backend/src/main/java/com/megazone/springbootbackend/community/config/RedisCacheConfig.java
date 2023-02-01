@@ -1,4 +1,4 @@
-package com.megazone.springbootbackend.config;
+package com.megazone.springbootbackend.community.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
