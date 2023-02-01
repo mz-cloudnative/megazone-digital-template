@@ -83,6 +83,7 @@ public class RedisCacheConfig {
   private RedisCacheConfiguration redisCacheDefaultConfiguration() {
     return RedisCacheConfiguration
         .defaultCacheConfig()
+        .disableCachingNullValues() //Null 값 캐싱하지 않기
         .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())) // key Serializer 변경
         .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer()))// Value Serializer 변경
         .entryTtl(cacheProperties.getRedis().getTimeToLive()); //기본 유효시간
@@ -100,6 +101,7 @@ public class RedisCacheConfig {
 
   @Bean
   public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
+    //@Cacheable @CacheEvict @CachePut 어노테이션 사용으로 캐싱 처리할 때 사용되는 설정
     return RedisCacheManager.RedisCacheManagerBuilder
         .fromConnectionFactory(redisConnectionFactory)
         .cacheDefaults(redisCacheDefaultConfiguration())
@@ -108,8 +110,9 @@ public class RedisCacheConfig {
   }
 
   @Bean
-  public RedisTemplate<?, ?> redisTemplate() {
-    RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<>();
+  public RedisTemplate<String, Object> redisTemplate() {
+    //Redis JPA, RedisTemplate으로 캐싱처리 할 때 사용되는 설정
+    RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
     redisTemplate.setConnectionFactory(redisConnectionFactory());
     redisTemplate.setKeySerializer(new StringRedisSerializer());
     redisTemplate.setValueSerializer(jackson2JsonRedisSerializer());
