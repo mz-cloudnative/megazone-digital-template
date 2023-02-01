@@ -1,9 +1,9 @@
 package com.megazone.springbootbackend.repository;
 
-import com.megazone.springbootbackend.model.entity.StaffsEntity;
+import com.megazone.springbootbackend.model.entity.ClubEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface StaffsRepository extends JpaRepository<StaffsEntity, String> {
+public interface ClubRepository extends JpaRepository<ClubEntity, String> {
 }

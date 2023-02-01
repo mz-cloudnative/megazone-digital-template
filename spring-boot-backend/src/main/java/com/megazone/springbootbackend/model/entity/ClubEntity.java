@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Setter
 @Builder
 @Table(name = "clubs")
-public class ClubsEntity {
+public class ClubEntity {
     @Id
     @Column(name = "id", nullable = false)
     private String id;

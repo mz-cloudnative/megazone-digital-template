@@ -3,10 +3,10 @@ package com.megazone.springbootbackend.serviceImpl;
 import com.megazone.springbootbackend.common.GenerateUUID;
 import com.megazone.springbootbackend.model.dto.ClubAddDto;
 import com.megazone.springbootbackend.model.dto.ClubModifiedDto;
-import com.megazone.springbootbackend.model.entity.ClubsEntity;
-import com.megazone.springbootbackend.model.entity.QClubsEntity;
+import com.megazone.springbootbackend.model.entity.ClubEntity;
+import com.megazone.springbootbackend.model.entity.QClubEntity;
 import com.megazone.springbootbackend.model.response.FirstClubResponse;
-import com.megazone.springbootbackend.repository.ClubsRepository;
+import com.megazone.springbootbackend.repository.ClubRepository;
 import com.megazone.springbootbackend.service.ClubService;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class ClubServiceImpl implements ClubService {
-    private final ClubsRepository repository;
+    private final ClubRepository repository;
     private final EntityManager em;
     private final JPAQueryFactory jpaQueryFactory;
 
@@ -34,9 +34,9 @@ public class ClubServiceImpl implements ClubService {
     @Override
     @Transactional
     public void insertClubs(List<ClubAddDto> clubDtos) {
-        List<ClubsEntity> clubsEntities = clubDtos.stream().map(clubDto -> {
+        List<ClubEntity> clubsEntities = clubDtos.stream().map(clubDto -> {
             String uuid = GenerateUUID.generateUUID();
-            return ClubsEntity.builder()
+            return ClubEntity.builder()
                     .id(uuid)
                     .abbr(clubDto.getAbbr())
                     .website(clubDto.getWebsite())
@@ -51,9 +51,9 @@ public class ClubServiceImpl implements ClubService {
     // JPQL 이용
     @Override
     public FirstClubResponse selectFirstClub(String name) {
-        String jpql = "select c from ClubsEntity c where c.name like :name";
-        TypedQuery<ClubsEntity> query = em.createQuery(jpql, ClubsEntity.class).setParameter("name", name);
-        ClubsEntity entity = query.getSingleResult();
+        String jpql = "select c from ClubEntity c where c.name like :name";
+        TypedQuery<ClubEntity> query = em.createQuery(jpql, ClubEntity.class).setParameter("name", name);
+        ClubEntity entity = query.getSingleResult();
         em.clear();
         return FirstClubResponse.builder()
                 .id(entity.getId())
@@ -67,8 +67,8 @@ public class ClubServiceImpl implements ClubService {
     // queryDSL 이용
     @Override
     public List<FirstClubResponse> selectFirstClubs() {
-        QClubsEntity qClubs = new QClubsEntity("c");
-        List<ClubsEntity> list = jpaQueryFactory.selectFrom(qClubs).where(qClubs.status.eq(true)).fetch();
+        QClubEntity qClubs = new QClubEntity("c");
+        List<ClubEntity> list = jpaQueryFactory.selectFrom(qClubs).where(qClubs.status.eq(true)).fetch();
         return list.stream().map(entity -> {
             return FirstClubResponse.builder()
                     .id(entity.getId())
@@ -76,6 +76,7 @@ public class ClubServiceImpl implements ClubService {
                     .abbr(entity.getAbbr())
                     .stadium(entity.getStadium())
                     .website(entity.getWebsite())
+                    .status(entity.isStatus())
                     .build();
         }).collect(Collectors.toList());
     }
@@ -84,8 +85,8 @@ public class ClubServiceImpl implements ClubService {
     @Override
     public List<FirstClubResponse> selectAllFirstClub() {
         Session session = sessionFactory.openSession();
-        String hql = "select c from ClubsEntity c";
-        List<ClubsEntity> list = session.createQuery(hql).list();
+        String hql = "select c from ClubEntity c";
+        List<ClubEntity> list = session.createQuery(hql).list();
         session.close();
         return list.stream().map(clubsEntity -> {
             return FirstClubResponse.builder()
@@ -100,9 +101,10 @@ public class ClubServiceImpl implements ClubService {
     }
 
     @Override
+    @Transactional
     public void updateClubs(ClubModifiedDto club) {
         Session session = sessionFactory.openSession();
-        String hql = "update ClubsEntity set name = :name, abbr = :abbr, website = :website, stadium = :stadium, status = :status where id like :id";
+        String hql = "update ClubEntity set name = :name, abbr = :abbr, website = :website, stadium = :stadium, status = :status where id like :id";
         session.createQuery(hql)
                 .setParameter("id", club.getId())
                 .setParameter("name", club.getName())
