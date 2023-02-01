@@ -3,10 +3,11 @@ package com.megazone.springbootbackend.model.request;
 import lombok.Getter;
 
 @Getter
-public class PlayerAddRequest {
-    private String name;
+public class PlayerModifiedRequest {
+    private String id;
     private Integer backNumber;
-    private String clubId;
+    private String name;
+    private String club;
     private String nationality;
     private String position;
     private String joined;

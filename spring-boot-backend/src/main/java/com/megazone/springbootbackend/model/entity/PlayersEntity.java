@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 @Entity
 @NoArgsConstructor
@@ -18,8 +17,7 @@ public class PlayersEntity {
     @Column(name = "id", nullable = false)
     private String id;
 
-    @NotNull
-    @Column(name = "back_number", nullable = false)
+    @Column(name = "back_number")
     private Integer backNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -40,9 +38,9 @@ public class PlayersEntity {
 
     @NotNull
     @Column(name = "joined", nullable = false)
-    private Date joined;
+    private String joined;
 
     @NotNull
     @Column(name = "birth", nullable = false)
-    private Date birth;
+    private String birth;
 }

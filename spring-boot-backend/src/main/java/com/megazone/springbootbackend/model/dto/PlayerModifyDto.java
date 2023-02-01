@@ -5,10 +5,11 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class PlayerAddDto {
-    private String name;
+public class PlayerModifyDto {
+    private String id;
     private Integer backNumber;
-    private String clubId;
+    private String name;
+    private String club;
     private String nationality;
     private String position;
     private String joined;
