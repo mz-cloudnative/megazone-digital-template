@@ -30,10 +30,4 @@ public class MoimDetailEntity extends BaseTimeEntity{
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "moim_id", updatable = false)
   private MoimEntity moimEntity;
-//  @Column(name = "create_datetime", nullable = false)
-//  private LocalDateTime createDtt;
-//
-//  @Column(name = "update_datetime", nullable = false)
-//  private LocalDateTime updateDtt;
-
 }

@@ -19,9 +19,9 @@ public class MoimResponse {
   private Long moimId;
   @Schema(description = "모임 명")
   private String moimName;
-  @Schema(description = "모임 생성시간")
+  @Schema(description = "모임 생성일자")
   private LocalDateTime createDtt;
-  @Schema(description = "모임 변경시간")
+  @Schema(description = "모임 변경일자")
   private LocalDateTime updateDtt;
   @Schema(description = "모임 상태")
   private Status moimStatus;
@@ -38,5 +38,17 @@ public class MoimResponse {
         .moimStatus(moimEntity.getMoimStatus())
         .moimDetailEntityList(moimEntity.getMoimDetailEntity())
         .build();
+  }
+
+  @Override
+  public String toString() {
+    return "MoimResponse{" +
+        "moimId=" + moimId +
+        ", moimName='" + moimName + '\'' +
+        ", createDtt=" + createDtt +
+        ", updateDtt=" + updateDtt +
+        ", moimStatus=" + moimStatus +
+        ", moimDetailEntityList=" + moimDetailEntityList +
+        '}';
   }
 }

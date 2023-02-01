@@ -26,7 +26,7 @@ public class MoimEntity extends BaseTimeEntity {
   @Column(name = "moim_status", nullable = false)
   private Status moimStatus;
 
-  @OneToMany(mappedBy = "moimEntity")
+  @OneToMany(mappedBy = "moimEntity", cascade = CascadeType.ALL)
   private List<MoimDetailEntity> moimDetailEntity = new ArrayList<>();
 
   @Builder

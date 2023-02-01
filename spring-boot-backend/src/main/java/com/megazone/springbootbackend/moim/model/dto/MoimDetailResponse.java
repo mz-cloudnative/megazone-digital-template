@@ -27,10 +27,10 @@ public class MoimDetailResponse {
   @Schema(description = "모임 장소")
   private String moimDetailPlace;
 
-  @Schema(description = "모임 생성시간")
+  @Schema(description = "모임 생성일자")
   private LocalDateTime createDtt;
 
-  @Schema(description = "모임 변경시간")
+  @Schema(description = "모임 변경일자")
   private LocalDateTime updateDtt;
 
   public static MoimDetailResponse fromEntity(MoimDetailEntity moimDetailEntity) {
@@ -43,5 +43,18 @@ public class MoimDetailResponse {
         .createDtt(moimDetailEntity.getCreateDtt())
         .updateDtt(moimDetailEntity.getUpdateDtt())
         .build();
+  }
+
+  @Override
+  public String toString() {
+    return "MoimDetailResponse{" +
+        "moimDetailId=" + moimDetailId +
+        ", moimId=" + moimId +
+        ", moimDetailContent='" + moimDetailContent + '\'' +
+        ", moimDetailableNum=" + moimDetailableNum +
+        ", moimDetailPlace='" + moimDetailPlace + '\'' +
+        ", createDtt=" + createDtt +
+        ", updateDtt=" + updateDtt +
+        '}';
   }
 }
