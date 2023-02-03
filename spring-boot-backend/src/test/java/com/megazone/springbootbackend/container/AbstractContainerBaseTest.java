@@ -3,9 +3,11 @@ package com.megazone.springbootbackend.container;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
 /***************************************************
  * <ul>
@@ -30,12 +32,15 @@ public abstract class AbstractContainerBaseTest {
 
   private static final String REDIS_IMAGE = "redis:6-alpine";
   private static final String POSTGRESQL_IMAGE = "postgres:alpine";
+  private static final String KAFKA_IMAGE = "confluentinc/cp-kafka:7.3.1.arm64";
 
   @Container
   static final GenericContainer REDIS_CONTAINER;
-
   @Container
   static final PostgreSQLContainer POSTGRE_SQL_CONTAINER;
+
+  @Container
+  static final KafkaContainer KAFKA_CONTAINER;
 
   static {
     REDIS_CONTAINER = new GenericContainer<>(REDIS_IMAGE)
@@ -47,6 +52,11 @@ public abstract class AbstractContainerBaseTest {
         .withExposedPorts(5432)
         .withReuse(true);
     POSTGRE_SQL_CONTAINER.start();
+
+    KAFKA_CONTAINER = new KafkaContainer(DockerImageName.parse(KAFKA_IMAGE))
+        .withExposedPorts(9093)
+        .withReuse(true);
+    KAFKA_CONTAINER.start();
   }
 
   @DynamicPropertySource

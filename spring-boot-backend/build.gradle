@@ -67,6 +67,7 @@ dependencies {
 	//TestContainers 관련(단위테스트)
 	testImplementation("org.testcontainers:junit-jupiter:1.17.6")
 	testImplementation("org.testcontainers:postgresql:1.17.6")
+	testImplementation("org.testcontainers:kafka:1.17.6")
 }
 
 // QueryDSL 추가
