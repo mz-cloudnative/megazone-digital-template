@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/user/article")
 @RequiredArgsConstructor
@@ -41,6 +43,11 @@ public class ArticleController {
     @GetMapping("/search/page")
     public ResponseEntity<Page<PageResponseDto>> pageArticleBySearching(@RequestParam(name = "page") int page, SearchDto searchDto) {
         return ResponseEntity.ok(articleService.pageArticleWithSearching(page, searchDto));
+    }
+
+    @GetMapping("/search/rank")
+    public List<SearchRankResponseDto> searchRankList(){
+        return articleService.SearchRankList();
     }
 
     @GetMapping("/page/notice")
