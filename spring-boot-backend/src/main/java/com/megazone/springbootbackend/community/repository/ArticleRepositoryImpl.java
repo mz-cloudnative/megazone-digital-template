@@ -74,7 +74,7 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
         if (searchDto.getTitle()!=null && searchDto.getTitle()!="") {
             builder.or(article.title.contains(searchDto.getTitle()));
         }
-        if (searchDto.getNickname()!=null && searchDto.getContent()!="") {
+        if (searchDto.getContent()!=null && searchDto.getContent()!="") {
             builder.or(article.content.contains(searchDto.getContent()));
         }
 
@@ -98,18 +98,5 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
 
         return new PageImpl<>(pages, pageable, totalSize);
     }
-
-
-//    private BooleanExpression nicknameEq(String nicknameCond) {
-//        return nullSafeBuilder(() -> article.users.nickname.eq())
-//    }
-//
-//    private BooleanExpression titleEq(String titleCond) {
-//        return titleCond != null ? article.title.eq(titleCond) : null;
-//    }
-//
-//    private BooleanExpression contentEq(String contentCond) {
-//        return contentCond != null ? article.content.eq(contentCond) : null;
-//    }
 
 }
