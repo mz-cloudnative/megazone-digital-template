@@ -3,6 +3,7 @@ package com.megazone.springbootbackend.sample;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.megazone.springbootbackend.container.AbstractContainerBaseTest;
 import com.megazone.springbootbackend.sample.model.domain.SampleRedis;
 import com.megazone.springbootbackend.sample.repository.SampleRedisRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.redis.DataRedisTest;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 /***************************************************
  * <ul>
@@ -32,6 +34,7 @@ import org.springframework.boot.test.autoconfigure.data.redis.DataRedisTest;
  * </pre>
  ***************************************************/
 @DataRedisTest
+@Testcontainers
 @TestMethodOrder(value = MethodOrderer.OrderAnnotation.class) //@Order에 의해 메소드별 실행순서 보장
 @DisplayName("Redis JPA 테스트")
 class SampleRedisJpaTest extends AbstractContainerBaseTest {

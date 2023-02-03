@@ -1,8 +1,9 @@
-package com.megazone.springbootbackend.sample;
+package com.megazone.springbootbackend.container;
 
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
@@ -28,20 +29,33 @@ public abstract class AbstractContainerBaseTest {
   //로컬의 도커 데스크탑이 실행중이어야 한다.
 
   private static final String REDIS_IMAGE = "redis:6-alpine";
+  private static final String POSTGRESQL_IMAGE = "postgres:alpine";
 
   @Container
   static final GenericContainer REDIS_CONTAINER;
+
+  @Container
+  static final PostgreSQLContainer POSTGRE_SQL_CONTAINER;
 
   static {
     REDIS_CONTAINER = new GenericContainer<>(REDIS_IMAGE)
         .withExposedPorts(6379)
         .withReuse(true);
     REDIS_CONTAINER.start();
+
+    POSTGRE_SQL_CONTAINER = new PostgreSQLContainer<>(POSTGRESQL_IMAGE)
+        .withExposedPorts(5432)
+        .withReuse(true);
+    POSTGRE_SQL_CONTAINER.start();
   }
 
   @DynamicPropertySource
   public static void overrideProps(DynamicPropertyRegistry registry) {
     registry.add("spring.redis.host", REDIS_CONTAINER::getHost);
     registry.add("spring.redis.port", () -> "" + REDIS_CONTAINER.getMappedPort(6379));
+
+    registry.add("spring.datasource.url", POSTGRE_SQL_CONTAINER::getJdbcUrl);
+    registry.add("spring.datasource.username", POSTGRE_SQL_CONTAINER::getUsername);
+    registry.add("spring.datasource.password", POSTGRE_SQL_CONTAINER::getPassword);
   }
 }
