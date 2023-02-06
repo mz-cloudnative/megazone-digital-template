@@ -184,7 +184,7 @@ public class ManagerController {
 
     @PostMapping("/staffs")
     @Operation(description = "스태프 등록")
-    public void ddStaffs(@RequestBody List<StaffAddRequest> staffs){
-
+    public void addStaffs(@RequestBody List<StaffAddRequest> staffs){
+        staffService.insertStaffs(staffs.stream().map(staff -> StaffDto.builder().build()).collect(Collectors.toList()));
     }
 }

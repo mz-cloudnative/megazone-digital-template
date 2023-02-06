@@ -10,4 +10,6 @@ public interface StaffService {
     List<StaffDto> selectAllStaff();
 
     List<StaffDto> selectSearchedStaff(String keyword);
+
+    void insertStaffs(List<StaffDto> list);
 }

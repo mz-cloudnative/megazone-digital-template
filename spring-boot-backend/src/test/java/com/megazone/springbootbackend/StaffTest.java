@@ -37,6 +37,8 @@ import static org.mockito.Mockito.when;
 class StaffTest {
     @Mock
     private ClubRepository clubRepository;
+    @Mock
+    private GenerateUUID generateUUID;
     @InjectMocks
     private StaffServiceImpl staffService;
     @Mock
@@ -139,7 +141,15 @@ class StaffTest {
     @Test
     @DisplayName("스태프 등록")
     void insertStaff() {
-        StaffEntity staff = StaffEntity.builder()
+        List<StaffDto> dtos = List.of(StaffDto.builder()
+                .clubName(NONE)
+                .name(NONE)
+                .nationality(NONE)
+                .role(NONE)
+                .joined(NONE)
+                .birth(NONE)
+                .build());
+        List<StaffEntity> staffs = List.of(StaffEntity.builder()
                 .id(NONE)
                 .club(noneClub)
                 .name(NONE)
@@ -147,9 +157,15 @@ class StaffTest {
                 .role(NONE)
                 .birth(NONE)
                 .joined(NONE)
-                .build();
-        given(staffRepository.save(staff)).willReturn(staff);
-        staffService.addStaffs()
+                .build());
+
+//        given(generateUUID.generateUUID()).willReturn(NONE);
+        given(jpaQueryFactory.selectFrom(clubEntity)).willReturn(jpaClubQuery);
+        given(jpaClubQuery.where(any(Predicate.class))).willReturn(jpaClubQuery);
+        given(jpaClubQuery.fetch()).willReturn(List.of(noneClub));
+        lenient().when(staffRepository.saveAll(staffs)).thenReturn(staffs);
+
+        staffService.insertStaffs(dtos);
     }
 
     private void matchGiven(String keyword) {
