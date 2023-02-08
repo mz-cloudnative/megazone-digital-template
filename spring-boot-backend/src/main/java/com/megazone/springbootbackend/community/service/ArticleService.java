@@ -35,7 +35,6 @@ public class ArticleService {
 
     private final RedisTemplate<String, String> redisTemplate;
 
-
     private final SecurityUtil securityUtil;
 
     public List<PageResponseDto> allArticle(){

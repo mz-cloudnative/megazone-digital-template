@@ -5,8 +5,10 @@ import com.megazone.springbootbackend.community.model.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 public interface TokenRepository extends JpaRepository<Token, Long> {
-    Token findByUsers(Users user);
+    List<Token> findByUsers(Users user);
 //
 //    void deleteByUsername(String username);
     @Transactional

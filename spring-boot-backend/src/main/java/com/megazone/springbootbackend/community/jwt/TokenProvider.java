@@ -117,6 +117,7 @@ public class TokenProvider implements InitializingBean {
             //여기는 다시 로그인 페이지로 이동하게 하기
         } catch (ExpiredJwtException e) {
             logger.info("만료된 JWT 토큰입니다.");
+            tokenRepository.deleteByTokenName(token);
             SecurityContextHolder.clearContext();
             //그리고 여기서 redirection login페이지 주기
         } catch (UnsupportedJwtException e) {

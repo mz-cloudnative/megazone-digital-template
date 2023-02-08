@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.megazone.springbootbackend.community.jwt.TokenProvider;
 import com.megazone.springbootbackend.community.model.entity.Token;
+import com.megazone.springbootbackend.community.model.entity.Users;
 import com.megazone.springbootbackend.community.repository.TokenRepository;
 import com.megazone.springbootbackend.community.repository.UserRepository;
 import com.megazone.springbootbackend.community.util.RedisUtil;
@@ -18,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Base64;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -66,8 +69,8 @@ public class AuthService {
         Authentication authentication = tokenProvider.getAuthentication(token1);
 
         // 3. DB에 저장된 Refresh Token 제거
-        Token token2=tokenRepository.findByUsers(userRepository.findByUsername(authentication.getName()).get());
-        tokenRepository.deleteById(token2.getTokenId());
+        //Token token2=tokenRepository.findByUsers(userRepository.findByUsername(authentication.getName()).get());
+        //tokenRepository.deleteById(token2.getTokenId());
 
         // 4. Access Token blacklist에 등록하여 만료시키기
         // 해당 엑세스 토큰의 남은 유효시간을 얻음
@@ -75,5 +78,19 @@ public class AuthService {
         redisUtil.setBlackList(token1, "logout", expiration, TimeUnit.MILLISECONDS);
         //redisTemplate.opsForValue().set(token1, "logout", expiration, TimeUnit.MILLISECONDS);
 
+    }
+
+    @Transactional
+    public void deleteExpiredToken(Users user){
+        List<Token> tokenList = tokenRepository.findByUsers(user);
+        Long now = new Date().getTime();
+
+        for(Token token : tokenList ) {
+            Long value1 = token.getExpiredDate().getTime()-now;
+
+            if (value1.intValue()<=0) {
+                tokenRepository.deleteByTokenName(token.getTokenName());
+            }
+        }
     }
 }
