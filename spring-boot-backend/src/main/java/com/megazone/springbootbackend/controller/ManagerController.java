@@ -10,6 +10,8 @@ import com.megazone.springbootbackend.service.PlayerService;
 import com.megazone.springbootbackend.service.StaffService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -87,14 +89,23 @@ public class ManagerController {
                 .build();
     }
 
-    @GetMapping
+    @GetMapping("/allPlayer")
     @Operation(description = "모든 선수 조회")
-    public List<PlayerResponse> findAllPlayer() {
-        List<PlayerSelectDto> allPlayer = playerService.selectAllPlayer();
-        return allPlayer.stream().map(player -> {
-            return PlayerResponse.builder()
-                    .build();
-        }).collect(Collectors.toList());
+    public List<PlayerResponse> findAllPlayer(Pageable pageable) {
+        Page<PlayerSelectDto> allPlayer = playerService.selectAllPlayer((pageable));
+        return allPlayer.stream().map(player ->
+            PlayerResponse.builder()
+                    .id(player.getId())
+                    .backNumber(player.getBackNumber())
+                    .name(player.getName())
+                    .clubId(player.getClubId())
+                    .clubName(player.getClubName())
+                    .nationality(player.getNationality())
+                    .position(player.getPosition())
+                    .joined(player.getJoined())
+                    .birth(player.getBirth())
+                    .build())
+                .collect(Collectors.toList());
     }
 
     @PostMapping("/player")

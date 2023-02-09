@@ -9,13 +9,18 @@ import com.megazone.springbootbackend.model.entity.PlayerEntity;
 import com.megazone.springbootbackend.model.entity.QClubEntity;
 import com.megazone.springbootbackend.repository.PlayerRepository;
 import com.megazone.springbootbackend.service.PlayerService;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.megazone.springbootbackend.model.entity.QPlayerEntity.playerEntity;
 
@@ -43,8 +48,22 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public List<PlayerSelectDto> selectAllPlayer() {
-        return null;
+    public Page<PlayerSelectDto> selectAllPlayer(Pageable pageable) {
+        List<PlayerEntity> entites = jpaQueryFactory.selectFrom(playerEntity).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
+        List<PlayerSelectDto> players = entites.stream().map(entity -> PlayerSelectDto.builder()
+                        .id(entity.getId())
+                        .backNumber(entity.getBackNumber())
+                        .name(entity.getName())
+                        .clubId(entity.getClub().getId())
+                        .clubName(entity.getClub().getName())
+                        .nationality(entity.getNationality())
+                        .position(entity.getPosition())
+                        .joined(entity.getJoined())
+                        .birth(entity.getBirth())
+                        .build())
+                .collect(Collectors.toList());
+        Long totalCount = jpaQueryFactory.select(playerEntity.count()).from(playerEntity).fetchOne();
+        return new PageImpl<>(players, pageable, totalCount);
     }
 
 

@@ -14,9 +14,11 @@ services:
 #    expose:
 #      - '9092'
     volumes:
-      - "kafka_data:/bitnami"
+      - "kafka_data:/bitnami/kafka"
     environment:
-      - ALLOW_PLAINTEXT_LISTENER=yes
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_CREATE_TOPICS: "test:1:1"
+
 
 #  debezium:
 #    image: debezium/connect
