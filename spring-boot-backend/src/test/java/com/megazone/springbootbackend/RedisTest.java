@@ -79,4 +79,9 @@ public class RedisTest {
         String last = listOperations.rightPop(key);
         assertThat(last).isEqualTo(".");
     }
+
+    @Test
+    void testZSet() {
+        ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
+    }
 }

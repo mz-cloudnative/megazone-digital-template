@@ -91,21 +91,19 @@ public class ManagerController {
 
     @GetMapping("/allPlayer")
     @Operation(description = "모든 선수 조회")
-    public List<PlayerResponse> findAllPlayer(Pageable pageable) {
+    public Page<PlayerResponse> findAllPlayer(Pageable pageable) {
         Page<PlayerSelectDto> allPlayer = playerService.selectAllPlayer((pageable));
-        return allPlayer.stream().map(player ->
-            PlayerResponse.builder()
-                    .id(player.getId())
-                    .backNumber(player.getBackNumber())
-                    .name(player.getName())
-                    .clubId(player.getClubId())
-                    .clubName(player.getClubName())
-                    .nationality(player.getNationality())
-                    .position(player.getPosition())
-                    .joined(player.getJoined())
-                    .birth(player.getBirth())
-                    .build())
-                .collect(Collectors.toList());
+        return allPlayer.map(playerSelectDto -> PlayerResponse.builder()
+                .id(playerSelectDto.getId())
+                .backNumber(playerSelectDto.getBackNumber())
+                .name(playerSelectDto.getName())
+                .clubId(playerSelectDto.getClubId())
+                .clubName(playerSelectDto.getClubName())
+                .nationality(playerSelectDto.getNationality())
+                .position(playerSelectDto.getPosition())
+                .joined(playerSelectDto.getJoined())
+                .birth(playerSelectDto.getBirth())
+                .build());
     }
 
     @PostMapping("/player")
