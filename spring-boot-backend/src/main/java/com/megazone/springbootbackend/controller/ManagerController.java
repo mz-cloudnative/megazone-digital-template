@@ -60,15 +60,15 @@ public class ManagerController {
     @PostMapping("/clubs")
     @Operation(description = "1부리그로 처음 들어오는 팀들 입력")
     public void addTeam(@RequestBody List<ClubAddRequest> request) {
-        List<ClubAddDto> clubDtos = request.stream().map(req -> {
-            return ClubAddDto.builder()
+        List<ClubAddDto> clubDtos = request.stream().map(req ->
+            ClubAddDto.builder()
                     .website(req.getWebsite())
                     .stadium(req.getStadium())
                     .abbr(req.getAbbr())
                     .name(req.getName())
                     .status(req.getStatus())
-                    .build();
-        }).collect(Collectors.toList());
+                    .build()
+        ).collect(Collectors.toList());
         clubService.insertClubs(clubDtos);
     }
 
@@ -141,8 +141,8 @@ public class ManagerController {
     @Operation(description = "클럽별 스태프 조회")
     public List<StaffResponse> getStaffByClub(@RequestParam String clubName) {
         List<StaffDto> list = staffService.selectStaffByClub(clubName);
-        return list.stream().map(staffDto -> {
-            return StaffResponse.builder()
+        return list.stream().map(staffDto ->
+            StaffResponse.builder()
                    .id(staffDto.getId())
                    .name(staffDto.getName())
                    .clubId(staffDto.getClubId())
@@ -151,16 +151,16 @@ public class ManagerController {
                    .nationality(staffDto.getNationality())
                    .joined(staffDto.getJoined())
                    .birth(staffDto.getBirth())
-                   .build();
-        }).collect(Collectors.toList());
+                   .build()
+        ).collect(Collectors.toList());
     }
 
     @GetMapping("/allStaff")
     @Operation(description = "전체 스태프 조회")
     public List<StaffResponse> getAllStaff() {
         List<StaffDto> list = staffService.selectAllStaff();
-        return list.stream().map(staffDto -> {
-            return StaffResponse.builder()
+        return list.stream().map(staffDto ->
+            StaffResponse.builder()
                     .id(staffDto.getId())
                     .name(staffDto.getName())
                     .clubId(staffDto.getClubId())
@@ -169,16 +169,16 @@ public class ManagerController {
                     .nationality(staffDto.getNationality())
                     .joined(staffDto.getJoined())
                     .birth(staffDto.getBirth())
-                    .build();
-        }).collect(Collectors.toList());
+                    .build()
+        ).collect(Collectors.toList());
     }
 
     @GetMapping("/searchedStaff")
     @Operation(description = "스태프 검색")
     public List<StaffResponse> getSearchedStaff(@RequestParam String keyword) {
         List<StaffDto> list = staffService.selectSearchedStaff(keyword);
-        return list.stream().map(staffDto -> {
-            return StaffResponse.builder()
+        return list.stream().map(staffDto ->
+            StaffResponse.builder()
                     .id(staffDto.getId())
                     .name(staffDto.getName())
                     .clubId(staffDto.getClubId())
@@ -187,8 +187,8 @@ public class ManagerController {
                     .nationality(staffDto.getNationality())
                     .joined(staffDto.getJoined())
                     .birth(staffDto.getBirth())
-                    .build();
-        }).collect(Collectors.toList());
+                    .build()
+        ).collect(Collectors.toList());
     }
 
     @PostMapping("/staffs")
