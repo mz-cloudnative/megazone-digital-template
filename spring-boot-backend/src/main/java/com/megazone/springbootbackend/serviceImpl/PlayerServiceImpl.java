@@ -11,6 +11,7 @@ import com.megazone.springbootbackend.repository.PlayerRepository;
 import com.megazone.springbootbackend.service.PlayerService;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,7 @@ public class PlayerServiceImpl implements PlayerService {
     private final PlayerRepository playerRepository;
 
     @Override
+    @Cacheable(value = "player", key = "#name")
     public PlayerSelectDto selectPlayer(String name) {
         PlayerEntity entity = jpaQueryFactory.selectFrom(playerEntity).where(playerEntity.name.eq(name)).fetch().get(0);
         return PlayerSelectDto.builder()
@@ -44,6 +46,8 @@ public class PlayerServiceImpl implements PlayerService {
     public List<PlayerSelectDto> selectAllPlayer() {
         return null;
     }
+
+
     // insert QueryDSL 보류 다른 방식으로 진행.
     @Override
     @Transactional

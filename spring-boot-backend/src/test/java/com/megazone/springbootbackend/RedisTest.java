@@ -3,11 +3,9 @@ package com.megazone.springbootbackend;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.SetOperations;
-import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.core.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -59,5 +57,26 @@ public class RedisTest {
 
         Long size = hashOperations.size(key);
         assertThat(size).isEqualTo(entries.size());
+    }
+
+    @Test
+    void testList() {
+        ListOperations<String, String> listOperations = redisTemplate.opsForList();
+        String key = "listKey";
+
+        listOperations.rightPush(key, "hello");
+        listOperations.rightPush(key, "world");
+        listOperations.rightPush(key, "!");
+        listOperations.leftPush(key, "!");
+
+        Long size = listOperations.size(key);
+        assertThat(size).isEqualTo(4);
+
+        String first = listOperations.leftPop(key);
+        assertThat(first).isEqualTo("!");
+
+        listOperations.set(key, 2, ".");
+        String last = listOperations.rightPop(key);
+        assertThat(last).isEqualTo(".");
     }
 }

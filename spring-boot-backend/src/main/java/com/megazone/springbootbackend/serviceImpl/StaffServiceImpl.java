@@ -9,6 +9,7 @@ import com.megazone.springbootbackend.repository.StaffRepository;
 import com.megazone.springbootbackend.service.StaffService;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
+    @Cacheable(value = "staff", key = "#keyword")
     public List<StaffDto> selectSearchedStaff(String keyword) {
         List<StaffEntity> staffs = jpaQueryFactory.selectFrom(staffEntity).where(staffEntity.name.contains(keyword)).fetch();
         return getStaffDtos(staffs);

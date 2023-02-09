@@ -51,6 +51,7 @@ public class PlayerTest {
     void selectPlayerTest() {
         PlayerEntity entity = jpaQueryFactory.selectFrom(playerEntity).where(playerEntity.name.eq(none)).fetch().get(0);
         assertThat(entity.getId()).isEqualTo(none);
+        System.out.println("entity.getClub().getName() = " + entity.getClub().getName());
     }
 
     @Test

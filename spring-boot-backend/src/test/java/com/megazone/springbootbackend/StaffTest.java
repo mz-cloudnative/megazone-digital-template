@@ -128,7 +128,6 @@ class StaffTest {
     }
 
     @Test
-    @Disabled
     @DisplayName("스태프 검색")
     void searchStaff() {
         matchGiven(rightKeyword);

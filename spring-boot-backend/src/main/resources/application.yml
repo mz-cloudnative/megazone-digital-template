@@ -50,8 +50,9 @@ spring:
       time-to-live: 60000 #60초
       expire-time:
         ttl:
-          user: 30
-          admin: 120
+          staff: 60
+          player: 120
+
 
 mybatis:
   mapper-locations: classpath*:mapper/*.xml
