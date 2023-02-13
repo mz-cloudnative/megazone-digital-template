@@ -5,14 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.*;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-public class RedisTest {
+class RedisTest {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
@@ -39,6 +38,20 @@ public class RedisTest {
 
         assertThat(members).containsOnly("s","u","c","e","f","l");
         assertThat(size).isEqualTo(6);
+    }
+
+    @Test
+    void testZSet() {
+        ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
+        String key = "zSetKey";
+
+        zSetOperations.add(key, "Kim", 94);
+        zSetOperations.add(key, "Lee", 92);
+        zSetOperations.add(key, "Tim", 90);
+
+        assertThat(zSetOperations.size(key)).isEqualTo(3);
+        assertThat(zSetOperations.rank(key, "Tim")).isZero();
+        assertThat(zSetOperations.score(key, "Kim")).isEqualTo(94);
     }
 
     @Test
@@ -78,10 +91,5 @@ public class RedisTest {
         listOperations.set(key, 2, ".");
         String last = listOperations.rightPop(key);
         assertThat(last).isEqualTo(".");
-    }
-
-    @Test
-    void testZSet() {
-        ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
     }
 }

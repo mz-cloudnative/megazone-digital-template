@@ -18,8 +18,8 @@ import static com.megazone.springbootbackend.model.entity.QClubEntity.clubEntity
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-public class ClubTest {
-    private String uuid = "None";
+class ClubTest {
+    private final String uuid = "None";
     @Autowired private EntityManager em;
     @Autowired private JPAQueryFactory jpaQueryFactory;
     @Autowired private ClubRepository clubRepository;

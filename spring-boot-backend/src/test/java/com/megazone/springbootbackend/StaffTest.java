@@ -1,6 +1,5 @@
 package com.megazone.springbootbackend;
 
-import com.megazone.springbootbackend.common.GenerateUUID;
 import com.megazone.springbootbackend.model.dto.StaffDto;
 import com.megazone.springbootbackend.model.entity.ClubEntity;
 import com.megazone.springbootbackend.model.entity.StaffEntity;
@@ -34,8 +33,6 @@ import static org.mockito.Mockito.when;
 class StaffTest {
     @Mock
     private ClubRepository clubRepository;
-    @Mock
-    private GenerateUUID generateUUID;
     @InjectMocks
     private StaffServiceImpl staffService;
     @Mock
@@ -47,8 +44,7 @@ class StaffTest {
     @Mock
     private StaffRepository staffRepository;
 
-    private static String NONE = "None";
-    private final String rightKeyword =  "No";
+    private static final String NONE = "None";
     private final String wrongKeyword =  "Noe";
 
     final ClubEntity noneClub = ClubEntity.builder()
@@ -130,6 +126,7 @@ class StaffTest {
     @Test
     @DisplayName("스태프 검색")
     void searchStaff() {
+        String rightKeyword = "No";
         matchGiven(rightKeyword);
         assertThat(staffService.selectSearchedStaff(rightKeyword)).hasSize(1);
 

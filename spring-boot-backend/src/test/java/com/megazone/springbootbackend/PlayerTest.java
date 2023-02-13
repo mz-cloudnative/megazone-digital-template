@@ -22,9 +22,9 @@ import static org.mockito.BDDMockito.given;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class PlayerTest {
-    private String none = "None";
-    private String test = "test";
+class PlayerTest {
+    private final String none = "None";
+    private final String test = "test";
 
     @Autowired private JPAQueryFactory jpaQueryFactory;
     @Mock

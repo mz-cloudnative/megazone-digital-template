@@ -9,7 +9,6 @@ import com.megazone.springbootbackend.model.entity.PlayerEntity;
 import com.megazone.springbootbackend.model.entity.QClubEntity;
 import com.megazone.springbootbackend.repository.PlayerRepository;
 import com.megazone.springbootbackend.service.PlayerService;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
@@ -67,7 +66,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
 
-    // insert QueryDSL 보류 다른 방식으로 진행.
+    // insert QueryDSL 보류. 다른 방식으로 진행.
     @Override
     @Transactional
     public void addPlayer(PlayerAddDto playerAddDto) {
