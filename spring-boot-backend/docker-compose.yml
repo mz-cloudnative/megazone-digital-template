@@ -6,24 +6,84 @@ services:
     image: redis
     container_name: rediscache
     ports:
-    - 6380:6379
-    networks:
-      - spring-net
+      - 6380:6379
+#    networks:
+#      - spring-net
+#
+#  spring-testcontainers-app:
+#    image: spring-testcontainers-app
+#    container_name: spring-testcontainers-app
+#    build: spring-boot-backend
+#    restart: always
+#    environment:
+#      REDIS_HOST: rediscache
+#      REDOS_PORT: 6379
+#    ports:
+#      - 8080:8080
+#    depends_on:
+#      - redis
+#    networks:
+#      - spring-net
 
-  spring-testcontainers-app:
-    image: spring-testcontainers-app
-    container_name: spring-testcontainers-app
-    build: .
+  kafka1:
+    image: confluentinc/cp-kafka:7.2.1
+    ports:
+      - '9083:9083'
+    container_name: kafka1
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://kafka1:9083,CONTROLLER://kafka1:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:9083
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka1:9093,2@kafka2:9093,3@kafka3:9093'
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+    volumes:
+      - ./run_workaround.sh:/tmp/run_workaround.sh
+    command: "bash -c 'if [ ! -f /tmp/run_workaround.sh ]; then echo \"ERROR: Did you forget the run_workaround.sh file that came with this docker-compose.yml file?\" && exit 1 ; else /tmp/run_workaround.sh && /etc/confluent/docker/run ; fi'"
+
+  kafka2:
+    image: confluentinc/cp-kafka:7.2.1
+    ports:
+      - '9084:9084'
+    container_name: kafka2
+    environment:
+      KAFKA_NODE_ID: 2
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://kafka2:9084,CONTROLLER://kafka2:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:9084
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka1:9093,2@kafka2:9093,3@kafka3:9093'
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+    volumes:
+      - ./run_workaround.sh:/tmp/run_workaround.sh
+    command: "bash -c 'if [ ! -f /tmp/run_workaround.sh ]; then echo \"ERROR: Did you forget the run_workaround.sh file that came with this docker-compose.yml file?\" && exit 1 ; else /tmp/run_workaround.sh && /etc/confluent/docker/run ; fi'"
+
+  kafka3:
+    image: confluentinc/cp-kafka:7.2.1
+    ports:
+      - '9085:9085'
+    container_name: kafka3
+    environment:
+      KAFKA_NODE_ID: 3
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://kafka3:9085,CONTROLLER://kafka3:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka3:9085
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka1:9093,2@kafka2:9093,3@kafka3:9093'
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+    volumes:
+      - ./run_workaround.sh:/tmp/run_workaround.sh
+    command: "bash -c 'if [ ! -f /tmp/run_workaround.sh ]; then echo \"ERROR: Did you forget the run_workaround.sh file that came with this docker-compose.yml file?\" && exit 1 ; else /tmp/run_workaround.sh && /etc/confluent/docker/run ; fi'"
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui
+    container_name: kafka-ui
+    ports:
+      - "8989:8080"
     restart: always
     environment:
-      REDIS_HOST: rediscache
-      REDOS_PORT: 6379
-    ports:
-      - 8080:8080
-    depends_on:
-      - redis
-    networks:
-      - spring-net
-
-networks:
-  spring-net:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka1:9083,kafka2:9084,kafka3:9085
+#networks:
+#  spring-net:
