@@ -1,0 +1,71 @@
+version: '3.9'
+x-uuid: &uuid
+  UUID: PW8YNrLGSJKjlMwLY6fo4A #현재는 하드코딩으로 넣어둠. 동일한 클러스터 아이디가 들어가야함.
+services:
+  kafka1:
+    image: confluentinc/cp-kafka:7.3.1
+    container_name: kafka1
+    ports:
+      - "19092:19092"
+    environment:
+      <<: *uuid
+      KAFKA_NODE_ID: 1
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://kafka1:19092,CONTROLLER://kafka1:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:19092
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka1:9093,2@kafka2:9093,3@kafka3:9093'
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+    volumes:
+      - ./run_workaround.sh:/tmp/run_workaround.sh
+    command: "bash -c '/tmp/run_workaround.sh && /etc/confluent/docker/run'"
+
+  kafka2:
+    image: confluentinc/cp-kafka:7.3.1
+    container_name: kafka2
+    ports:
+      - "29092:29092"
+    environment:
+      <<: *uuid
+      KAFKA_NODE_ID: 2
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://kafka2:29092,CONTROLLER://kafka2:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:29092
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka1:9093,2@kafka2:9093,3@kafka3:9093'
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+    volumes:
+      - ./run_workaround.sh:/tmp/run_workaround.sh
+    command: "bash -c '/tmp/run_workaround.sh && /etc/confluent/docker/run'"
+
+  kafka3:
+    image: confluentinc/cp-kafka:7.3.1
+    container_name: kafka3
+    ports:
+      - "39092:39092"
+    environment:
+      <<: *uuid
+      KAFKA_NODE_ID: 3
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://kafka3:39092,CONTROLLER://kafka3:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka3:39092
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka1:9093,2@kafka2:9093,3@kafka3:9093'
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+    volumes:
+      - ./run_workaround.sh:/tmp/run_workaround.sh
+    command: "bash -c '/tmp/run_workaround.sh && /etc/confluent/docker/run'"
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui
+    container_name: kafka-ui
+    ports:
+      - "9090:8080"
+    depends_on:
+      - kafka1
+      - kafka2
+      - kafka3
+    restart: always
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka1:19092,kafka2:29092,kafka3:39092

@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /***************************************************
  * <ul>
@@ -38,15 +39,21 @@ public class SampleMybatisService {
     public void sampleDataAdd(SampleDataRequest param) {
         sampleMapper.save(SampleJpaEntity.requestToEntity(param));
     }
+
+    @Transactional(readOnly = true)
     public List<SampleDataResponse> sampleDataList() {
         return sampleMapper.findAll().stream()
                 .map(SampleDataResponse::entityToResponse)
                 .collect(Collectors.toList());
     }
+
+    @Transactional(readOnly = true)
     public SampleDataResponse sampleData(Long sampleId) {
         final var sampleData = sampleMapper.findById(sampleId).orElseThrow(NullPointerException::new);
         return SampleDataResponse.entityToResponse(sampleData);
     }
+
+    @Transactional(readOnly = true)
     public List<SampleDataResponse> getNames(String sampleName) {
         return sampleXmlMapper.findByName(sampleName).stream()
                 .map(SampleDataResponse::entityToResponse)
