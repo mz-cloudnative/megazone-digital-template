@@ -28,13 +28,19 @@ spring:
   h2:
     console:
       enabled: false
+  redis:
+    host: localhost
+    port: 6379
+  main:
+    allow-circular-references: true
+    allow-bean-definition-overriding: true
 
   jpa:
     database: POSTGRESQL
     database-platform: org.hibernate.dialect.PostgreSQL9Dialect
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     properties:
       hibernate:
         format_sql: true
@@ -43,14 +49,11 @@ spring:
     locations: classpath:db/migration,classpath:db/seed
     enabled: false
     baseline-on-migrate: true
-    url: jdbc:postgresql://localhost:5432/example
+    url: jdbc:postgresql://localhost:5432/sample
     user: postgres
     password: 1234
     #out-of-order: true
     #validate-on-migrate: true
-  redis:
-    host: localhost
-    port: 6379
 
   cache:
     type: redis
@@ -60,19 +63,6 @@ spring:
         ttl:
           user: 30
           admin: 120
-  kafka:
-    bootstrap-servers: kafka1:19092, kafka2:29092, kafka3:39092
-    consumer:
-      group-id: testgroup
-      auto-offset-reset: earliest
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-message:
-  topic:
-    default: "test-topic"
 
 mybatis:
   mapper-locations: classpath*:mapper/*.xml
@@ -83,3 +73,8 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
+
+jwt:
+  header: Authorization
+  secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
+  token-validity-in-seconds: 900
