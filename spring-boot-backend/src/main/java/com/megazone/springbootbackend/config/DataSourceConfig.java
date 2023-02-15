@@ -5,13 +5,12 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Primary;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -37,51 +36,46 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 @EnableTransactionManagement
 public class DataSourceConfig {
 
-    private static final String PRIMARY = "primary";
-    private static final String SECONDARY = "secondary";
+  private static final String MASTER = "master";
+  private static final String SLAVE = "slave";
 
-    @Value("${spring.datasource.url}")
-    private String jdbcUrl;
-
-    @Value("${spring.datasource-read-only.url}")
-    private String readOnlyJdbcUrl;
-
-  @Bean(name = "dataSource")
-  @ConfigurationProperties(prefix = "spring.datasource")
-  public DataSource dataSource() {
-    return DataSourceBuilder.create().url(jdbcUrl).type(HikariDataSource.class).build();
+  @Bean(name = "masterDataSource")
+  @ConfigurationProperties(prefix = "spring.datasource.master.hikari")
+  public DataSource masterDataSource() {
+    return DataSourceBuilder.create().type(HikariDataSource.class).build();
   }
 
-  @Bean(name = "readOnlyDataSource")
-  @ConfigurationProperties(prefix = "spring.datasource-read-only")
-  public DataSource readOnlyDataSource() {
-    return DataSourceBuilder.create().url(readOnlyJdbcUrl).type(HikariDataSource.class).build();
+  @Bean(name = "slaveDataSource")
+  @ConfigurationProperties(prefix = "spring.datasource.slave.hikari")
+  public DataSource slaveDataSource() {
+    return DataSourceBuilder.create().type(HikariDataSource.class).build();
   }
 
+  @DependsOn({"masterDataSource", "slaveDataSource"})
   @Bean(name = "routingDataSource")
   public DataSource routingDataSource(
-          @Qualifier("dataSource") DataSource dataSource,
-          @Qualifier("readOnlyDataSource") DataSource readOnlyDataSource) {
-      AbstractRoutingDataSource routingDataSource =
-              new AbstractRoutingDataSource() {
-                  @Override
-                  protected Object determineCurrentLookupKey() {
-                      return TransactionSynchronizationManager.isCurrentTransactionReadOnly()
-                              ? SECONDARY
-                              : PRIMARY;
-                  }
-              };
-      Map<Object, Object> dataSourceMap = new HashMap<>();
-      dataSourceMap.put(SECONDARY, readOnlyDataSource);
-      dataSourceMap.put(PRIMARY, dataSource);
-      routingDataSource.setTargetDataSources(dataSourceMap);
-      routingDataSource.setDefaultTargetDataSource(dataSource);
-      return routingDataSource;
+      @Qualifier("masterDataSource") DataSource masterDataSource,
+      @Qualifier("slaveDataSource") DataSource slaveDataSource) {
+    AbstractRoutingDataSource routingDataSource = new AbstractRoutingDataSource() {
+      @Override
+      protected Object determineCurrentLookupKey() {
+        return TransactionSynchronizationManager.isCurrentTransactionReadOnly() ? SLAVE : MASTER;
+      }
+    };
+    Map<Object, Object> dataSourceMap = new HashMap<>();
+    dataSourceMap.put(MASTER, masterDataSource);
+    dataSourceMap.put(SLAVE, slaveDataSource);
+    routingDataSource.setTargetDataSources(dataSourceMap);
+    routingDataSource.setDefaultTargetDataSource(masterDataSource);
+    return routingDataSource;
   }
+
   @Primary
-  @Bean
-  public DataSource lazyConnectionDataSource(
-          @Qualifier("routingDataSource") DataSource routingDataSource) {
-      return new LazyConnectionDataSourceProxy(routingDataSource);
+  @DependsOn("routingDataSource")
+  @Bean(name = "dataSource")
+  public DataSource dataSource(
+      @Qualifier("routingDataSource") DataSource routingDataSource) {
+    return new LazyConnectionDataSourceProxy(routingDataSource);
   }
+
 }

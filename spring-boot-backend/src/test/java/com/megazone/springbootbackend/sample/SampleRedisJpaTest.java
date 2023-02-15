@@ -3,8 +3,11 @@ package com.megazone.springbootbackend.sample;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.megazone.springbootbackend.container.ContainerBase;
+import com.megazone.springbootbackend.container.ContainerKind;
 import com.megazone.springbootbackend.sample.model.domain.SampleRedis;
 import com.megazone.springbootbackend.sample.repository.SampleRedisRepository;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -13,6 +16,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.redis.DataRedisTest;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 /***************************************************
  * <ul>
@@ -32,9 +40,10 @@ import org.springframework.boot.test.autoconfigure.data.redis.DataRedisTest;
  * </pre>
  ***************************************************/
 @DataRedisTest
+@Testcontainers
 @TestMethodOrder(value = MethodOrderer.OrderAnnotation.class) //@Order에 의해 메소드별 실행순서 보장
 @DisplayName("Redis JPA 테스트")
-class SampleRedisJpaTest extends AbstractContainerBaseTest {
+class SampleRedisJpaTest {
 
   @Autowired
   private SampleRedisRepository sampleRedisRepository;
@@ -44,6 +53,22 @@ class SampleRedisJpaTest extends AbstractContainerBaseTest {
   final static String SAMPLE_NAME = "test99";
   final static Long SAMPLE_ID = 99L;
 
+  @Container
+  static final GenericContainer REDIS_CONTAINER =
+      ContainerBase.containerCreate(ContainerKind.REDIS);
+
+  /**
+   * @param registry: 스프링부트 컨텍스트
+   * @apiNote 생성한 컨테이너에 대해서 스프링부트 컨텍스트에 설정을 해주기 위함.
+   * @author mz01-ohyunbk
+   * @since 2023/02/15 1:15 PM
+   */
+  @DynamicPropertySource
+  static void init(DynamicPropertyRegistry registry) {
+    ContainerBase.overrideProps(registry
+        , List.of(REDIS_CONTAINER));
+  }
+
   @BeforeEach
   public void givenInit() {
     sampleDataRequest = SampleRedis.builder()
@@ -52,6 +77,7 @@ class SampleRedisJpaTest extends AbstractContainerBaseTest {
         .expiration(30L)
         .build();
   }
+
   public SampleRedis getRedisSample(String name) {
     return sampleRedisRepository.findBySampleName(name)
         .orElseThrow(() -> new NullPointerException("존재하지 않습니다."));
@@ -72,7 +98,7 @@ class SampleRedisJpaTest extends AbstractContainerBaseTest {
     }
 
     //then
-    assertThrows(NullPointerException.class,() -> getRedisSample(SAMPLE_NAME));
+    assertThrows(NullPointerException.class, () -> getRedisSample(SAMPLE_NAME));
   }
 
 

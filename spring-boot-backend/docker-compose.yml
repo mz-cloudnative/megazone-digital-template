@@ -1,89 +1,70 @@
-version: '3.0'
-
+version: '3.8'
 services:
-
-  redis:
-    image: redis
-    container_name: rediscache
-    ports:
-      - 6380:6379
-#    networks:
-#      - spring-net
-#
-#  spring-testcontainers-app:
-#    image: spring-testcontainers-app
-#    container_name: spring-testcontainers-app
-#    build: spring-boot-backend
-#    restart: always
-#    environment:
-#      REDIS_HOST: rediscache
-#      REDOS_PORT: 6379
-#    ports:
-#      - 8080:8080
-#    depends_on:
-#      - redis
-#    networks:
-#      - spring-net
-
-  kafka1:
-    image: confluentinc/cp-kafka:7.2.1
-    ports:
-      - '9083:9083'
-    container_name: kafka1
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.3.1.arm64
     environment:
-      KAFKA_NODE_ID: 1
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
-      KAFKA_LISTENERS: PLAINTEXT://kafka1:9083,CONTROLLER://kafka1:9093
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:9083
-      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
-      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka1:9093,2@kafka2:9093,3@kafka3:9093'
-      KAFKA_PROCESS_ROLES: 'broker,controller'
-    volumes:
-      - ./run_workaround.sh:/tmp/run_workaround.sh
-    command: "bash -c 'if [ ! -f /tmp/run_workaround.sh ]; then echo \"ERROR: Did you forget the run_workaround.sh file that came with this docker-compose.yml file?\" && exit 1 ; else /tmp/run_workaround.sh && /etc/confluent/docker/run ; fi'"
-
-  kafka2:
-    image: confluentinc/cp-kafka:7.2.1
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
     ports:
-      - '9084:9084'
-    container_name: kafka2
-    environment:
-      KAFKA_NODE_ID: 2
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
-      KAFKA_LISTENERS: PLAINTEXT://kafka2:9084,CONTROLLER://kafka2:9093
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:9084
-      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
-      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka1:9093,2@kafka2:9093,3@kafka3:9093'
-      KAFKA_PROCESS_ROLES: 'broker,controller'
-    volumes:
-      - ./run_workaround.sh:/tmp/run_workaround.sh
-    command: "bash -c 'if [ ! -f /tmp/run_workaround.sh ]; then echo \"ERROR: Did you forget the run_workaround.sh file that came with this docker-compose.yml file?\" && exit 1 ; else /tmp/run_workaround.sh && /etc/confluent/docker/run ; fi'"
+      - "2181:2181"
 
-  kafka3:
-    image: confluentinc/cp-kafka:7.2.1
+  kafka-1:
+    image: confluentinc/cp-kafka:7.3.1.arm64
     ports:
-      - '9085:9085'
-    container_name: kafka3
+      - '9092:9092'
+    depends_on:
+      - zookeeper
     environment:
-      KAFKA_NODE_ID: 3
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
-      KAFKA_LISTENERS: PLAINTEXT://kafka3:9085,CONTROLLER://kafka3:9093
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka3:9085
-      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
-      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka1:9093,2@kafka2:9093,3@kafka3:9093'
-      KAFKA_PROCESS_ROLES: 'broker,controller'
-    volumes:
-      - ./run_workaround.sh:/tmp/run_workaround.sh
-    command: "bash -c 'if [ ! -f /tmp/run_workaround.sh ]; then echo \"ERROR: Did you forget the run_workaround.sh file that came with this docker-compose.yml file?\" && exit 1 ; else /tmp/run_workaround.sh && /etc/confluent/docker/run ; fi'"
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-1:19092,EXTERNAL://localhost:9092
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_NUM_PARTITIONS: 3
 
-  kafka-ui:
-    image: provectuslabs/kafka-ui
-    container_name: kafka-ui
+  kafka-2:
+    image: confluentinc/cp-kafka:7.3.1.arm64
     ports:
-      - "8989:8080"
-    restart: always
+      - '9093:9093'
+    depends_on:
+      - zookeeper
     environment:
-      - KAFKA_CLUSTERS_0_NAME=local
-      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka1:9083,kafka2:9084,kafka3:9085
-#networks:
-#  spring-net:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-2:29092,EXTERNAL://localhost:9093
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_NUM_PARTITIONS: 3
+
+  kafka-3:
+    image: confluentinc/cp-kafka:7.3.1.arm64
+    ports:
+      - '9094:9094'
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-3:39092,EXTERNAL://localhost:9094
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_NUM_PARTITIONS: 3
+
+    kafka-ui:
+      image: provectuslabs/kafka-ui
+      ports:
+        - "9090:8080"
+      depends_on:
+        - kafka-1
+        - kafka-2
+        - kafka-3
+      restart: always
+      environment:
+        - KAFKA_CLUSTERS_0_NAME=local
+        - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka-1:19092,kafka-2:29092,kafka-3:39092
+        - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181

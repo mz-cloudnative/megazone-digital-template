@@ -5,21 +5,25 @@ spring:
   application:
     name: spring-boot-backend
   datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/sample
-    username: postgres
-    password: 1234
-    connectionTestQuery: "SELECT 1"
-    maximumPoolSize: 50
-    minimumIdle: 50
-  datasource-read-only:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/sample
-    username: postgres
-    password: 1234
-    connectionTestQuery: "SELECT 1"
-    maximumPoolSize: 50
-    minimumIdle: 50
+    master:
+      hikari:
+        driver-class-name: org.postgresql.Driver
+        jdbc-url: jdbc:postgresql://localhost:5432/sample
+        username: postgres
+        password: 1234
+        connectionTestQuery: "SELECT 1"
+        maximumPoolSize: 50
+        minimumIdle: 50
+    slave:
+      hikari:
+        driver-class-name: org.postgresql.Driver
+        jdbc-url: jdbc:postgresql://localhost:5433/sample
+        read-only: true #DB 종류애 따라 해당 속성을 지원하지 않을 수 있으므로 확인 필요. postgresql은 지원.
+        username: postgres
+        password: 1234
+        connectionTestQuery: "SELECT 1"
+        maximumPoolSize: 50
+        minimumIdle: 50
 
   h2:
     console:
@@ -30,7 +34,7 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQL9Dialect
     show-sql: true
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
@@ -45,8 +49,8 @@ spring:
     #out-of-order: true
     #validate-on-migrate: true
   redis:
-    host: ${REDIS_HOST:localhost}
-    port: ${REDIS_PORT:6379}
+    host: localhost
+    port: 6379
 
   cache:
     type: redis
@@ -56,6 +60,19 @@ spring:
         ttl:
           user: 30
           admin: 120
+  kafka:
+    bootstrap-servers: kafka1:19092, kafka2:29092, kafka3:39092
+    consumer:
+      group-id: testgroup
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+message:
+  topic:
+    default: "test-topic"
 
 mybatis:
   mapper-locations: classpath*:mapper/*.xml
