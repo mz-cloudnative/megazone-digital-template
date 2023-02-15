@@ -53,6 +53,10 @@ spring:
           staff: 60
           player: 120
 
+  rest:
+    connect-time: 3000 # 3초
+    read-time: 5000 # 5초
+
 
 mybatis:
   mapper-locations: classpath*:mapper/*.xml
@@ -63,3 +67,10 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
+
+info:
+  external:
+    url: "https://api-football-v1.p.rapidapi.com/v3/teams/countries"
+    header:
+      key: "1cbf2f38a4msh07b8e15a1dcb899p11faa5jsnabfd355d9b81"
+      host: "api-football-v1.p.rapidapi.com"
