@@ -21,19 +21,19 @@ import org.springframework.stereotype.Service;
  * ======================================
  * </pre>
  ***************************************************/
-@Service
-@RequiredArgsConstructor
-public class KafkaProducer {
-
-  @Value(value = "${message.topic.default}")
-  private String topicName;
-  private final KafkaTemplate<String, String> kafkaTemplate;
-
-  public void sendMessage(String message) {
-    this.kafkaTemplate.send(this.topicName, message);
-  }
-
-  public void sendMessage(String topicName, String message) {
-    this.kafkaTemplate.send(topicName, message);
-  }
-}
+//@Service
+//@RequiredArgsConstructor
+//public class KafkaProducer {
+//
+//  @Value(value = "${message.topic.default}")
+//  private String topicName;
+//  private final KafkaTemplate<String, String> kafkaTemplate;
+//
+//  public void sendMessage(String message) {
+//    this.kafkaTemplate.send(this.topicName, message);
+//  }
+//
+//  public void sendMessage(String topicName, String message) {
+//    this.kafkaTemplate.send(topicName, message);
+//  }
+//}

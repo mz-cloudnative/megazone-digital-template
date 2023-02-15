@@ -63,13 +63,16 @@ spring:
   kafka:
     bootstrap-servers: kafka1:19092, kafka2:29092, kafka3:39092
     consumer:
-      group-id: testgroup
+      group-id: loc-group2
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    topics:
+      example: loc-topic-create3,loc-topic-create4,loc-topic-create5
+
 message:
   topic:
     default: "test-topic"
