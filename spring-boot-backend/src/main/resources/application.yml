@@ -71,6 +71,9 @@ logging:
 info:
   external:
     url: "https://api-football-v1.p.rapidapi.com/v3/teams/countries"
-    header:
+    headerKey:
+      key: "X-RapidAPI-Key"
+      host: "X-RapidAPI-Host"
+    headerValue:
       key: "1cbf2f38a4msh07b8e15a1dcb899p11faa5jsnabfd355d9b81"
       host: "api-football-v1.p.rapidapi.com"
