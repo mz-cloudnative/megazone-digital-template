@@ -93,7 +93,7 @@ public class AuthController {
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
         logger.info("로그인을 하는 나는 여기로 옵니다.");
 
-        authService.deleteExpiredToken(token.getUsers());
+        //authService.deleteExpiredToken(token.getUsers());
 
         return new ResponseEntity<>(new TokenDto(jwt.getToken(), jwt.getTokenExpiresIn()), httpHeaders, HttpStatus.OK);
     }

@@ -8,6 +8,7 @@ import com.megazone.springbootbackend.community.model.entity.Article;
 import com.megazone.springbootbackend.community.model.entity.Users;
 import com.megazone.springbootbackend.community.repository.ArticleRepository;
 import com.megazone.springbootbackend.community.repository.UserRepository;
+import com.megazone.springbootbackend.community.util.AuthProvider;
 import com.megazone.springbootbackend.community.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -35,7 +36,9 @@ public class ArticleService {
 
     private final RedisTemplate<String, String> redisTemplate;
 
-    private final SecurityUtil securityUtil;
+    //private final SecurityUtil securityUtil;
+
+    private final AuthProvider authProvider;
 
     public List<PageResponseDto> allArticle(){
         List<Article> articles = articleRepository.findAll();
@@ -120,8 +123,9 @@ public class ArticleService {
     }
     @Transactional
     public Users isUserCurrent() {
-        return userRepository.findById(securityUtil.getCurrentUserId())
-                .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다"));
+//        return userRepository.findById(securityUtil.getCurrentUserId())
+//                .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다"));
+        return userRepository.findByUsername(authProvider.authenticate(SecurityContextHolder.getContext().getAuthentication()).getName()).orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다"));
     }
 
     public Article authorizationArticleWriter(Long id) {

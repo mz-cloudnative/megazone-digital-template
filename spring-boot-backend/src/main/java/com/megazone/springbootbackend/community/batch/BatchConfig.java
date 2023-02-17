@@ -1,4 +1,4 @@
-package com.megazone.springbootbackend.community.config;
+package com.megazone.springbootbackend.community.batch;
 
 import com.megazone.springbootbackend.community.model.entity.Token;
 import com.megazone.springbootbackend.community.repository.TokenRepository;

@@ -1,5 +1,6 @@
-package com.megazone.springbootbackend.community.config;
+package com.megazone.springbootbackend.community.batch;
 
+import com.megazone.springbootbackend.community.batch.BatchConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;

@@ -25,15 +25,15 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class KafkaProducer {
 
-  @Value(value = "${message.topic.default}")
-  private String topicName;
-  private final KafkaTemplate<String, String> kafkaTemplate;
-
-  public void sendMessage(String message) {
-    this.kafkaTemplate.send(this.topicName, message);
-  }
-
-  public void sendMessage(String topicName, String message) {
-    this.kafkaTemplate.send(topicName, message);
-  }
+//  @Value(value = "${message.topic.default}")
+//  private String topicName;
+//  private final KafkaTemplate<String, String> kafkaTemplate;
+//
+//  public void sendMessage(String message) {
+//    this.kafkaTemplate.send(this.topicName, message);
+//  }
+//
+//  public void sendMessage(String topicName, String message) {
+//    this.kafkaTemplate.send(topicName, message);
+//  }
 }

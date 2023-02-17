@@ -1,4 +1,4 @@
-package com.megazone.springbootbackend.community.config;
+package com.megazone.springbootbackend.community.util;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class Provider implements AuthenticationProvider {
+public class AuthProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {

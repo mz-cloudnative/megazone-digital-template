@@ -7,8 +7,10 @@ import com.megazone.springbootbackend.community.model.entity.Token;
 import com.megazone.springbootbackend.community.model.entity.Users;
 import com.megazone.springbootbackend.community.repository.TokenRepository;
 import com.megazone.springbootbackend.community.repository.UserRepository;
+import com.megazone.springbootbackend.community.util.AuthProvider;
 import com.megazone.springbootbackend.community.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,7 +29,8 @@ public class UserService {
     private AuthenticationManagerBuilder authenticationManagerBuilder;
     private TokenRepository tokenRepository;
     private TokenProvider tokenProvider;
-    private final SecurityUtil securityUtil;
+    //private final SecurityUtil securityUtil;
+    private final AuthProvider authProvider;
 
     @Transactional
     public Users signup(UserDto userDto) {
@@ -74,11 +77,12 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public Optional<Users> getMyUserWithAuthorities() {
-        return SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername);
+        return userRepository.findOneWithAuthoritiesByUsername(authProvider.authenticate(SecurityContextHolder.getContext().getAuthentication()).getName());
+        //return SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername);
     }
 
 
     public UserDto getMyInfoBySecurity(){
-        return userRepository.findById(securityUtil.getCurrentUserId()).map(UserDto::of).orElseThrow(()->new RuntimeException("로그인 유저 정보가 없습니다"));
+        return userRepository.findByUsername(authProvider.authenticate(SecurityContextHolder.getContext().getAuthentication()).getName()).map(UserDto::of).orElseThrow(()->new RuntimeException("로그인 유저 정보가 없습니다"));
     }
 }

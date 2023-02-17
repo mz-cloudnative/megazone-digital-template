@@ -81,15 +81,14 @@ public class AuthService {
     }
 
     @Transactional
-    public void deleteExpiredToken(Users user){
-        List<Token> tokenList = tokenRepository.findByUsers(user);
+    public void deleteExpiredToken(Token token){
         Long now = new Date().getTime();
-
-        for(Token token : tokenList ) {
-            Long value1 = token.getExpiredDate().getTime()-now;
+        List<Token> tokenList = tokenRepository.findAll();
+        for(Token t : tokenList ) {
+            Long value1 = t.getExpiredDate().getTime()-now;
 
             if (value1.intValue()<=0) {
-                tokenRepository.deleteByTokenName(token.getTokenName());
+                tokenRepository.deleteByTokenName(t.getTokenName());
             }
         }
     }

@@ -27,13 +27,13 @@ import org.springframework.stereotype.Service;
 @Getter
 public class KafkaConsumer {
 
-  private ConsumerRecord<?, ?> consumerRecord = null;
-
-  @KafkaListener(topics = "${message.topic.default}", groupId = "${spring.kafka.consumer.group-id}")
-  public void consume(ConsumerRecord<?, ?> consumerRecord) {
-    log.info("received payload='{}'", consumerRecord.toString());
-    this.consumerRecord = consumerRecord;
-    log.info("Consumed message : {}", consumerRecord.value());
-  }
+//  private ConsumerRecord<?, ?> consumerRecord = null;
+//
+//  @KafkaListener(topics = "${message.topic.default}", groupId = "${spring.kafka.consumer.group-id}")
+//  public void consume(ConsumerRecord<?, ?> consumerRecord) {
+//    log.info("received payload='{}'", consumerRecord.toString());
+//    this.consumerRecord = consumerRecord;
+//    log.info("Consumed message : {}", consumerRecord.value());
+//  }
 
 }
