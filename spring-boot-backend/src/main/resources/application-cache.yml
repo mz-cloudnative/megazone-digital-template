@@ -1,0 +1,47 @@
+spring:
+  redis:
+    host: localhost
+    port: 6379
+
+  cache:
+    type: redis
+    redis:
+      time-to-live: 60000 #60초
+      expire-time:
+        ttl:
+          user: 30
+          admin: 120
+--- #local 설정
+spring:
+  config:
+    activate:
+      on-profile: "cache-local"
+  redis:
+    host: localhost
+    port: 6379
+
+  cache:
+    type: redis
+    redis:
+      time-to-live: 60000 #60초
+      expire-time:
+        ttl:
+          user: 30
+          admin: 120
+--- #dev 설정
+spring:
+  config:
+    activate:
+      on-profile: "cache-dev"
+  redis:
+    host: localhost
+    port: 6379
+
+  cache:
+    type: redis
+    redis:
+      time-to-live: 60000 #60초
+      expire-time:
+        ttl:
+          user: 30
+          admin: 120

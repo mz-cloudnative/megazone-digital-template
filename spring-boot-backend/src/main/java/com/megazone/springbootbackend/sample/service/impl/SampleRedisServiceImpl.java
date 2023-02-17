@@ -4,11 +4,11 @@ import com.megazone.springbootbackend.sample.model.domain.SampleRedis;
 import com.megazone.springbootbackend.sample.model.dto.SampleDataRequest;
 import com.megazone.springbootbackend.sample.model.dto.SampleDataResponse;
 import com.megazone.springbootbackend.sample.repository.SampleRedisRepository;
+import com.megazone.springbootbackend.sample.repository.mapper.RedisSampleMapper;
 import com.megazone.springbootbackend.sample.service.SampleRedisService;
 import javax.management.openmbean.KeyAlreadyExistsException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -17,13 +17,14 @@ import org.springframework.stereotype.Service;
 public class SampleRedisServiceImpl implements SampleRedisService {
 
   private final SampleRedisRepository sampleRedisRepository;
-  private final ModelMapper modelMapper;
+  private final RedisSampleMapper redisSampleMapper;
 
   @Override
   public SampleDataResponse getRedisSample(String name) {
-    return modelMapper.map(
-        sampleRedisRepository.findBySampleName(name).orElseThrow(() -> new NullPointerException("존재하지 않습니다.")),
-        SampleDataResponse.class);
+    return redisSampleMapper.sampleRedisToResponse(
+        sampleRedisRepository.findBySampleName(name)
+            .orElseThrow(() -> new NullPointerException("존재하지 않습니다."))
+    );
   }
 
   @Override

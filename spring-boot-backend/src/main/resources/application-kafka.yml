@@ -1,0 +1,53 @@
+spring:
+  kafka:
+    #bootstrap-servers: kafka1:19092, kafka2:29092, kafka3:39092
+    bootstrap-servers: localhost:9092, localhost:9093, localhost:9094
+    consumer:
+      group-id: testgroup
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+message:
+  topic:
+    default: "test-topic"
+--- #local 설정
+spring:
+  config:
+    activate:
+      on-profile: "kafka-local"
+  kafka:
+    #bootstrap-servers: kafka1:19092, kafka2:29092, kafka3:39092
+    bootstrap-servers: localhost:9092, localhost:9093, localhost:9094
+    consumer:
+      group-id: testgroup
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+message:
+  topic:
+    default: "test-topic"
+--- #dev 설정
+spring:
+  config:
+    activate:
+      on-profile: "kafka-dev"
+  kafka:
+    #bootstrap-servers: kafka1:19092, kafka2:29092, kafka3:39092
+    bootstrap-servers: localhost:9092, localhost:9093, localhost:9094
+    consumer:
+      group-id: testgroup
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+message:
+  topic:
+    default: "test-topic"
