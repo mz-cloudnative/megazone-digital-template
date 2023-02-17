@@ -7,7 +7,7 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 public interface ExternalService {
-    List<ExternalCountry> getExternalCountryToJson(ResponseEntity<String> response);
+    List<ExternalCountry> getExternalCountryToJson();
 
-    List<ExternalCountry> monoToJson(Mono<String> mono);
+    List<ExternalCountry> monoToJson();
 }

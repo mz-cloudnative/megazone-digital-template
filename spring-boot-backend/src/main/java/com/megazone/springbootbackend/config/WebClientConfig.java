@@ -1,5 +1,8 @@
 package com.megazone.springbootbackend.config;
 
+import io.netty.channel.ChannelOption;
+import io.netty.handler.timeout.ReadTimeoutHandler;
+import io.netty.handler.timeout.WriteTimeoutHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -13,10 +16,12 @@ import java.time.Duration;
 @Configuration
 @Slf4j
 public class WebClientConfig {
-    @Value("${spring.rest.connect-time}")
-    private int connectTimeout;
     @Value("${spring.rest.read-time}")
-    private int readTimeout;
+    private Integer readTimeout;
+    @Value("${spring.rest.write-time}")
+    private Integer writeTimeout;
+    @Value("${spring.rest.connect-time}")
+    private Integer connectTimeout;
     @Value("${info.external.url}")
     private String url;
     @Value("${info.external.headerKey.key}")
@@ -40,6 +45,9 @@ public class WebClientConfig {
 
     private HttpClient httpClient() {
         return HttpClient.create()
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, connectTimeout)
+                .doOnConnected(connection -> connection.addHandlerLast(new ReadTimeoutHandler(readTimeout/1000))
+                        .addHandlerLast(new WriteTimeoutHandler(writeTimeout/1000)))
                 .responseTimeout(Duration.ofSeconds(5));
     }
 }

@@ -3,59 +3,24 @@ package com.megazone.springbootbackend.controller;
 import com.megazone.springbootbackend.model.rawJson.ExternalCountry;
 import com.megazone.springbootbackend.service.ExternalService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.time.StopWatch;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 import java.util.List;
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class ExternalCountryController {
-    @Value("${info.external.url}")
-    private String url;
-
-    private final HttpEntity<?> httpEntity;
-    private final RestTemplate restTemplate;
     private final ExternalService externalService;
-    private final WebClient webClient;
 
 
     @GetMapping("/rtGetCountry")
     public List<ExternalCountry> getExternalCountry() {
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, httpEntity, String.class);
-        stopWatch.stop();
-        log.info("Time : " + stopWatch.getNanoTime());
-        return externalService.getExternalCountryToJson(response);
+        return externalService.getExternalCountryToJson();
     }
 
     @GetMapping("/wcGetCountry")
     public List<ExternalCountry> findAll() {
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
-        Mono<String> mono = webClient.get().retrieve()
-//                .onStatus(HttpStatus::is4xxClientError, response -> {
-//                    return null;
-//                })
-//                .onStatus(HttpStatus::is5xxServerError, response -> {
-//                    return null;
-//                })
-                // subscribe 발행하고 소멸
-                // 비동기 처리는 여러 건의 데이터를 처리할 때 필요. 가공을 위함이 아닌. 비동기 처리 확인은 DB에서 확인
-                .bodyToMono(String.class); // Flux<String> 타입
-        stopWatch.stop();
-        log.info("Time : " + stopWatch.getNanoTime());
-        return externalService.monoToJson(mono);
+        return externalService.monoToJson();
     }
 }

@@ -5,25 +5,47 @@ import com.google.gson.GsonBuilder;
 import com.megazone.springbootbackend.model.rawJson.ExternalCountry;
 import com.megazone.springbootbackend.model.rawJson.RawExternal;
 import com.megazone.springbootbackend.service.ExternalService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
 
 @Service
-@Slf4j
+@RequiredArgsConstructor
 public class ExternalServiceImpl implements ExternalService {
+    private final WebClient webClient;
+    private final HttpEntity<?> httpEntity;
+    private final RestTemplate restTemplate;
+    @Value("${info.external.url}")
+    private String url;
     @Override
-    public List<ExternalCountry> getExternalCountryToJson(ResponseEntity<String> response) {
+    public List<ExternalCountry> getExternalCountryToJson() {
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, httpEntity, String.class);
         Gson gson = new GsonBuilder().create();
         RawExternal external = gson.fromJson(response.getBody(), RawExternal.class);
         return external.getResponse();
     }
 
     @Override
-    public List<ExternalCountry> monoToJson(Mono<String> mono) {
+    public List<ExternalCountry> monoToJson() {
+        Mono<String> mono = webClient.get().retrieve()
+//                .onStatus(HttpStatus::is4xxClientError, response -> {
+//                    return null;
+//                })
+//                .onStatus(HttpStatus::is5xxServerError, response -> {
+//                    return null;
+//                })
+                // subscribe 발행하고 소멸
+                // 비동기 처리는 여러 건의 데이터를 처리할 때 필요. 가공을 위함이 아닌. 비동기 처리 확인은 DB에서 확인
+                .bodyToMono(String.class); // Flux<String> 타입
         Gson gson = new GsonBuilder().create();
         RawExternal external = gson.fromJson(mono.block(), RawExternal.class);
         return external.getResponse();
