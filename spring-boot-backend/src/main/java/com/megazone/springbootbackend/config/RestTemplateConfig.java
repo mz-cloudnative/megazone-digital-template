@@ -1,5 +1,7 @@
 package com.megazone.springbootbackend.config;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,16 +30,27 @@ public class RestTemplateConfig {
         return new RestTemplate(factory());
     }
 
+    // 헤더와 바디로 이루어진 엔티티
     @Bean
     public HttpEntity<String> httpEntity() {
         HttpHeaders header = new HttpHeaders();
         header.set(headerKeyKey, headerValueKey);
         header.set(headerKeyHost, headerValueHost);
+
         return new HttpEntity<>(header);
+    }
+
+    // basic contract for HTTP request execution
+    private HttpClient client() {
+        return HttpClientBuilder.create()
+                .setMaxConnTotal(50) // Assigns maximum total connection value.
+                .setMaxConnPerRoute(20) //Assigns maximum connection per route value.
+                .build();
     }
 
     private HttpComponentsClientHttpRequestFactory factory() {
         HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+        factory.setHttpClient(client());
         factory.setReadTimeout(readTimeout);
         factory.setConnectTimeout(connectTimeout);
         return factory;
