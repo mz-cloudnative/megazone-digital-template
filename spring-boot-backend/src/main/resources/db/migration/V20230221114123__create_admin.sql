@@ -1,0 +1,6 @@
+CREATE TABLE admin (
+    id VARCHAR(256) PRIMARY KEY,
+    "password" VARCHAR(20) NOT NULL,
+    "name" VARCHAR(40) NOT NULL,
+    birth VARCHAR(12) NOT NULL
+)
