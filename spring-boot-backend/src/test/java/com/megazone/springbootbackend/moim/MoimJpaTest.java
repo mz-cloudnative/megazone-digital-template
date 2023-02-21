@@ -27,7 +27,7 @@ public class MoimJpaTest {
   @DisplayName("모임 정보 저장하기")
   public void moim_info_save(){
     // given
-    MoimEntity moim = MoimEntity.builder().moimName("모임을 시작해볼까?").moimStatus(Status.RESERVE).build();
+    MoimEntity moim = MoimEntity.builder().moimAdministrator("무지개").moimName("모임을 시작해볼까?").moimStatus(Status.CREATE).build();
 
     // when
     MoimEntity saveMoim = moimRepository.save(moim);

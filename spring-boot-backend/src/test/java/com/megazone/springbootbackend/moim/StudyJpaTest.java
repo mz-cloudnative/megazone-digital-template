@@ -28,7 +28,7 @@ public class StudyJpaTest {
   public void moim_study_room_save(){
 
     //given
-    MoimStudyRoomEntity moimStudyRoomEntity = MoimStudyRoomEntity.builder().roomName("햇님 스터디룸").roomStatus(Status.NONE).build();
+    MoimStudyRoomEntity moimStudyRoomEntity = MoimStudyRoomEntity.builder().roomName("햇님 스터디룸").roomStatus(Status.CREATE).build();
 
     //when
     MoimStudyRoomEntity saveMoimStudyRoom = moimStudyRoomRepository.save(moimStudyRoomEntity);

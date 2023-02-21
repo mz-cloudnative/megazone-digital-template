@@ -1,5 +1,6 @@
 package com.megazone.springbootbackend.moim.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.megazone.springbootbackend.moim.model.domain.Status;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,9 @@ public class MoimEntity extends BaseTimeEntity {
   @Column(name = "moim_name", nullable = false)
   private String moimName;
 
+  @Column(name = "moim_administrator", nullable = false)
+  private String moimAdministrator;
+
   @Enumerated(EnumType.STRING)
   @Column(name = "moim_status", nullable = false)
   private Status moimStatus;
@@ -30,9 +34,10 @@ public class MoimEntity extends BaseTimeEntity {
   private List<MoimDetailEntity> moimDetailEntity = new ArrayList<>();
 
   @Builder
-  public MoimEntity(Long moimId, String moimName, Status moimStatus, List<MoimDetailEntity> moimDetailEntity) {
+  public MoimEntity(Long moimId, String moimName, String moimAdministrator, Status moimStatus, List<MoimDetailEntity> moimDetailEntity) {
     this.moimId = moimId;
     this.moimName = moimName;
+    this.moimAdministrator = moimAdministrator;
     this.moimStatus = moimStatus;
     this.moimDetailEntity = moimDetailEntity;
   }

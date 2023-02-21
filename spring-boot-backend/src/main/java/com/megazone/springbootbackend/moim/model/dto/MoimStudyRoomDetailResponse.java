@@ -1,6 +1,5 @@
 package com.megazone.springbootbackend.moim.model.dto;
 
-import com.megazone.springbootbackend.moim.model.domain.Status;
 import com.megazone.springbootbackend.moim.model.entity.MoimStudyRoomDetailEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;

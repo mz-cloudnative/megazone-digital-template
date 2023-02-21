@@ -1,8 +1,10 @@
 package com.megazone.springbootbackend.moim.model.domain;
 
 public enum Status {
+  CREATE("CREATE"), // 예약생성
+  READY("READY"), // 예약가능
   RESERVE("RESERVE"),   // 예약 중
-  NONE("NONE"); // 예약가능
+  EXPIRED("EXPIRED"); // 모임만료
 
   String staus;
 
