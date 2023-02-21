@@ -58,7 +58,7 @@ class SampleJpaTest {
   SampleCustomRepository sampleCustomRepository;
 
   @Container
-  static final GenericContainer POSTGRES_SQL_CONTAINER =
+  static final GenericContainer<?> POSTGRES_SQL_CONTAINER =
       ContainerBase.containerCreate(ContainerKind.POSTGRES_SQL);
 
   /**

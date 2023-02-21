@@ -32,7 +32,7 @@ import org.springframework.web.util.UriComponentsBuilder;
  ***************************************************/
 @RestClientTest
 @DisplayName("RestTemplate 테스트")
-public class RestTemplateTest {
+class RestTemplateTest {
 
   private static RestTemplate restTemplate;
 
@@ -42,7 +42,7 @@ public class RestTemplateTest {
     //given
     restTemplate = new RestTemplate();
 
-    MultiValueMap<String, String> valueMap = new LinkedMultiValueMap();
+    MultiValueMap<String, String> valueMap = new LinkedMultiValueMap<>();
     valueMap.setAll(
         Map.of(
             "solYear", "2023"
@@ -79,7 +79,7 @@ public class RestTemplateTest {
     //given
     restTemplate = new RestTemplate();
 
-    MultiValueMap<String, String> valueMap = new LinkedMultiValueMap();
+    MultiValueMap<String, String> valueMap = new LinkedMultiValueMap<>();
     valueMap.setAll(
         Map.of(
             "solYear", "2023"

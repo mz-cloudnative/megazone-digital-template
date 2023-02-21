@@ -50,13 +50,13 @@ class SampleKafkaTest {
   private KafkaAdmin admin;
 
   @Container
-  static final GenericContainer REDIS_CONTAINER =
+  static final GenericContainer<?> REDIS_CONTAINER =
       ContainerBase.containerCreate(ContainerKind.REDIS);
   @Container
-  static final GenericContainer POSTGRE_SQL_CONTAINER =
+  static final GenericContainer<?> POSTGRES_SQL_CONTAINER =
       ContainerBase.containerCreate(ContainerKind.POSTGRES_SQL);
   @Container
-  static final GenericContainer KAFKA_CONTAINER =
+  static final GenericContainer<?> KAFKA_CONTAINER =
       ContainerBase.containerCreate(ContainerKind.KAFKA);
 
   /**
@@ -68,7 +68,7 @@ class SampleKafkaTest {
   @DynamicPropertySource
   static void init(DynamicPropertyRegistry registry) {
     ContainerBase.overrideProps(registry
-        , List.of(REDIS_CONTAINER, POSTGRE_SQL_CONTAINER, KAFKA_CONTAINER));
+        , List.of(REDIS_CONTAINER, POSTGRES_SQL_CONTAINER, KAFKA_CONTAINER));
   }
 
   @Test

@@ -54,7 +54,7 @@ class SampleRedisJpaTest {
   final static Long SAMPLE_ID = 99L;
 
   @Container
-  static final GenericContainer REDIS_CONTAINER =
+  static final GenericContainer<?> REDIS_CONTAINER =
       ContainerBase.containerCreate(ContainerKind.REDIS);
 
   /**

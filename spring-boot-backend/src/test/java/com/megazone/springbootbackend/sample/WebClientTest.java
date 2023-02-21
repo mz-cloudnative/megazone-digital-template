@@ -1,9 +1,15 @@
 package com.megazone.springbootbackend.sample;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.megazone.springbootbackend.config.WebClientConfig;
+import com.megazone.springbootbackend.sample.model.dto.PublicApiDto;
 import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
@@ -30,19 +36,21 @@ import reactor.test.StepVerifier;
  * </pre>
  ***************************************************/
 @RestClientTest
+@Import({WebClientConfig.class})
 @DisplayName("WebClient 테스트")
 class WebClientTest {
 
-  private static WebClient webClient =
-      WebClient.builder()
-          .baseUrl("http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService")
-          .build();
+  @Autowired
+  private ObjectMapper objectMapper;
+
+  @Autowired
+  private WebClient webClient;
 
   @Test
   @DisplayName("WebClient GET Complete 테스트")
   void webClient_GET_complete_Test() {
     //given
-    MultiValueMap<String, String> valueMap = new LinkedMultiValueMap();
+    MultiValueMap<String, String> valueMap = new LinkedMultiValueMap<>();
     valueMap.setAll(
         Map.of(
             "solYear", "2023"
@@ -56,8 +64,6 @@ class WebClientTest {
 
     //when
     Mono<ResponseEntity<String>> response = webClient
-        .mutate()
-        .build()
         .get()
         .uri(uriBuilder ->
             uriBuilder.path("/getHoliDeInfo")
@@ -86,16 +92,20 @@ class WebClientTest {
         .toEntity(String.class) //응답상태, 헤더, 바디를 함께 객체 형태로 받을 경우 사용
         //.bodyToMono(String.class) //바디 정보만 필요한 경우 사용
         ;
+//    SpecialDayDTO dto = objectMapper.readValue(response.getBody(), SpecialDayDTO.class);
     //then
-    //error 검증
-//    StepVerifier.create(response)
-//        .expectSubscription()
-//        .expectError()
-//        .verify();
     StepVerifier.create(response)
         .expectSubscription()
         .expectNextMatches(
-            stringResponseEntity -> HttpStatus.OK.equals(stringResponseEntity.getStatusCode()))
+            stringResponseEntity -> {
+              try {
+                return objectMapper.readValue(stringResponseEntity.getBody(), PublicApiDto.class)
+                    .getResponse().getBody().getItems().getItem().size() > 0;
+              } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+              }
+            } //HttpStatus.OK.equals(stringResponseEntity.getStatusCode())
+        )
         .expectComplete()
         .verify();
   }
@@ -104,7 +114,7 @@ class WebClientTest {
   @DisplayName("WebClient GET Error 테스트")
   void webClient_GET_error_Test() {
     //given
-    MultiValueMap<String, String> valueMap = new LinkedMultiValueMap();
+    MultiValueMap<String, String> valueMap = new LinkedMultiValueMap<>();
     valueMap.setAll(
         Map.of(
             "solYear", "2023"
@@ -118,8 +128,6 @@ class WebClientTest {
 
     //when
     Mono<ResponseEntity<String>> response = webClient
-        .mutate()
-        .build()
         .get()
         .uri(uriBuilder ->
             uriBuilder.path("/getHoliDeo")
