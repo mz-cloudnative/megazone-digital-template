@@ -1,0 +1,26 @@
+#default 공통설정
+logging:
+  level:
+    org.hibernate.SQL: trace
+    org.hibernate.type: trace
+    web: trace
+--- #local 설정
+spring:
+  config:
+    activate:
+      on-profile: "logging-local"
+logging:
+  level:
+    org.hibernate.SQL: trace
+    org.hibernate.type: trace
+    web: trace
+--- #dev 설정
+spring:
+  config:
+    activate:
+      on-profile: "logging-dev"
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type: debug
+    web: debug

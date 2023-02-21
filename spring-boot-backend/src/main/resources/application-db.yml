@@ -2,17 +2,37 @@
 spring:
   h2:
     console:
-      enabled: false
+      enabled: true
 
   jpa:
     database: POSTGRESQL
     database-platform: org.hibernate.dialect.PostgreSQL9Dialect
     show-sql: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
+  datasource:
+    master:
+      hikari:
+        driver-class-name: org.postgresql.Driver
+        jdbc-url: jdbc:postgresql://localhost:5432/sample
+        username: postgres
+        password: 1234
+        connectionTestQuery: "SELECT 1"
+        maximumPoolSize: 50
+        minimumIdle: 50
+    slave:
+      hikari:
+        driver-class-name: org.postgresql.Driver
+        jdbc-url: jdbc:postgresql://localhost:5433/sample
+        read-only: true #DB 종류애 따라 해당 속성을 지원하지 않을 수 있으므로 확인 필요. postgresql은 지원.
+        username: postgres
+        password: 1234
+        connectionTestQuery: "SELECT 1"
+        maximumPoolSize: 50
+        minimumIdle: 50
 mybatis:
   mapper-locations: classpath*:mapper/*.xml
   configuration:
@@ -23,6 +43,20 @@ spring:
     activate:
       on-profile: "db-local"
 
+  h2:
+    console:
+      enabled: false
+
+  jpa:
+    database: POSTGRESQL
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+
   datasource:
     master:
       hikari:
@@ -53,16 +87,24 @@ spring:
     password: 1234
     #out-of-order: true
     #validate-on-migrate: true
-
-logging:
-  level:
-    org.hibernate.SQL: debug
-    org.hibernate.type: trace
 --- #dev 설정
 spring:
   config:
     activate:
       on-profile: "db-dev"
+  h2:
+    console:
+      enabled: false
+
+  jpa:
+    database: POSTGRESQL
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
 
   datasource:
     master:
@@ -93,9 +135,4 @@ spring:
     user: postgres
     password: 1234
     #out-of-order: true
-    #validate-on-migrate: true
-
-logging:
-  level:
-    org.hibernate.SQL: debug
-    org.hibernate.type: trace
+    #validate-on-migrate: true    org.hibernate.type: trace

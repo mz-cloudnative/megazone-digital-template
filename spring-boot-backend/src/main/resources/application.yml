@@ -3,17 +3,33 @@ server:
 spring:
   profiles:
     active:
-      - dev
+      - local
     group:
       local:
+        - devtools_apply
         - db-local
         - kafka-local
         - cache-local
+        - logging-local
       dev:
+        - devtools_apply
         - db-dev
         - kafka-dev
         - cache-dev
+        - logging-dev
+      stg: #프로필 미구성
+        - db-stg
+        - kafka-stg
+        - cache-stg
+        - logging-stg
+      prd: #프로필 미구성
+        - db-prd
+        - kafka-prd
+        - cache-prd
+        - logging-prd
     include:
+      - devtools
       - db
       - kafka
       - cache
+      - logging

@@ -48,19 +48,18 @@ dependencies {
     // QueryDsl
     implementation "com.querydsl:querydsl-core:${queryDslVersion}"
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
-    //implementation 'org.modelmapper:modelmapper:3.1.1'
     //TODO: 설정하게되면 Datasource 이중화 작동이 되지 않으므로 해당 설정은 반드시 개발환경에서만 적용하도록 한다.
     //P6Spy 쿼리 조회시 ? 값 바인딩
     //implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.1'
+    implementation "org.mapstruct:mapstruct:1.5.3.Final"
+    compileOnly "org.projectlombok:lombok:1.18.24"
+    implementation 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+
     // mac silicon only
     // https://github.com/apache/commons-lang/blob/master/src/main/java/org/apache/commons/lang3/SystemUtils.java#L1173
     if (osdetector.classifier == "osx-aarch_64") {
         runtimeOnly "io.netty:netty-resolver-dns-native-macos:4.1.89.Final:${osdetector.classifier}"
     }
-    implementation "org.mapstruct:mapstruct:1.5.3.Final"
-    compileOnly "org.projectlombok:lombok:1.18.24"
-    implementation 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
-
     runtimeOnly 'com.h2database:h2-mvstore:2.1.214'
     runtimeOnly 'org.postgresql:postgresql:42.3.8'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
