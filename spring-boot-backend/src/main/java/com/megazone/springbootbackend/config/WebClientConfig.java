@@ -1,5 +1,7 @@
 package com.megazone.springbootbackend.config;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
@@ -8,8 +10,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
+import org.springframework.http.codec.json.Jackson2JsonDecoder;
+import org.springframework.http.codec.json.Jackson2JsonEncoder;
 import org.springframework.web.reactive.function.client.ClientRequest;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
+import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
@@ -36,20 +41,30 @@ public class WebClientConfig {
 
   @Bean(name = "webClient")
   public WebClient webClient() {
-
     HttpClient httpClient = HttpClient.create()
         .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 3000)
         .doOnConnected(
             conn -> conn.addHandlerLast(new ReadTimeoutHandler(5))  //sec
                 .addHandlerLast(new WriteTimeoutHandler(60)) //sec
         );
-//        //Memory 조정: 2M (default 256KB)
-//        ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()
-//            .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(2*1024*1024))
-//            .build();
-
+    ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()
+        .codecs(clientCodecConfigurer -> {
+          ObjectMapper mapper = new ObjectMapper();
+          //Object로 가져올 때 빈 문자열을 null로 처리.
+          mapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
+          //배열이 아닌 객체라도 List 변수에 할당 가능
+          mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+          clientCodecConfigurer.defaultCodecs()
+              .jackson2JsonDecoder(new Jackson2JsonDecoder(mapper));
+          clientCodecConfigurer.defaultCodecs()
+              .jackson2JsonEncoder(new Jackson2JsonEncoder(mapper));
+          //Memory 조정: 2M (default 256KB)
+//          clientCodecConfigurer.defaultCodecs()
+//              .maxInMemorySize(2*1024*1024);
+        })
+        .build();
     return WebClient.builder()
-        .baseUrl("http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService")
+        .baseUrl("http://apis.data.go.kr/B090041/openapi/service")
         .clientConnector(new ReactorClientHttpConnector(httpClient))
         .filter(
             (req, next) -> next.exchange(
@@ -82,7 +97,7 @@ public class WebClientConfig {
                 }
             )
         )
-//        .exchangeStrategies(exchangeStrategies) //메모리 조정
+        .exchangeStrategies(exchangeStrategies) //objectMapper 설정 추가
 //        .defaultHeader("user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.87 Safari/537.3")
 //        .defaultCookie("httpclient-type", "webclient")
         .build();
