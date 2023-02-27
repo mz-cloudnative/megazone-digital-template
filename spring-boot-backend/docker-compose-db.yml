@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis
+    container_name: redis-digital
+    ports:
+      - "6379:6379"
+
+  postgres-master:
+    image: postgres:15.2
+    container_name: postgres-master
+    ports:
+      - "5432:5432"
+    volumes:
+      - /Users/mz01-geunhyung/postgres/data_master:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: "username"
+      POSTGRES_PASSWORD: "password"
+
+  postgres-slave:
+    image: postgres:15.2
+    container_name: postgres-slave
+    ports:
+      - "5433:5432"
+    volumes:
+      - /Users/mz01-geunhyung/postgres/data_slave:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: "username"
+      POSTGRES_PASSWORD: "password"
+
+

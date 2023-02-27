@@ -23,6 +23,8 @@ public class AdminController {
                 .name(request.getName())
                 .birth(request.getBirth())
                 .build();
-        adminService.register(dto);
+        if (adminService.checkId(dto.getId())) {
+            adminService.register(dto);
+        }
     }
 }

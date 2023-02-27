@@ -1,0 +1,11 @@
+version: '3.8'
+
+# zookeeper 설정 없이 kraft mode를 이용한 경우
+services:
+  kafka-1:
+    image: ubuntu/kafka:3.1.22
+    container_name: kafka-1
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1

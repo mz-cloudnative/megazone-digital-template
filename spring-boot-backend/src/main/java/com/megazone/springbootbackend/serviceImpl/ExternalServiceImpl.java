@@ -44,7 +44,6 @@ public class ExternalServiceImpl implements ExternalService {
 //                    return null;
 //                })
                 // subscribe 발행하고 소멸
-                // 비동기 처리는 여러 건의 데이터를 처리할 때 필요. 가공을 위함이 아닌. 비동기 처리 확인은 DB에서 확인
                 .bodyToMono(String.class); // Flux<String> 타입
         Gson gson = new GsonBuilder().create();
         RawExternal external = gson.fromJson(mono.block(), RawExternal.class);

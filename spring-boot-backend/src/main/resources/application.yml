@@ -2,20 +2,23 @@ server:
   port: 8080
 
 
-# TODO DB 이중화
 spring:
   application:
     name: spring-boot-backend
+
   datasource:
-    url: jdbc:postgresql://localhost:5432/
-    username: postgres
-    password: russia387
-    hikari:
-      data-source-properties:
-        rewriteBatchedStatements: true
-  h2:
-    console:
-      enabled: false
+    master:
+      hikari:
+        driver-class-name: org.postgresql.Driver
+        jdbc-url: jdbc:postgresql://localhost:5432
+        username: username
+        password: password
+    slave:
+      hikari:
+        driver-class-name: org.postgresql.Driver
+        jdbc-url: jdbc:postgresql://localhost:5433
+        username: username
+        password: password
 
   jpa:
     database: POSTGRESQL
@@ -36,8 +39,8 @@ spring:
     enabled: true
     baseline-on-migrate: true
     url: jdbc:postgresql://localhost:5432/
-    user: postgres
-    password: russia387
+    user: username
+    password: password
     #out-of-order: true
     validate-on-migrate: true
     validate-migration-naming: true
@@ -54,6 +57,17 @@ spring:
         ttl:
           staff: 60
           player: 120
+
+  kafka:
+    bootstrap-servers: kafka-1:19092, kafka-29092, kafka:39092
+    consumer:
+      group-id: group-1
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: all
 
   rest:
     connect-time: 5000 # 5초

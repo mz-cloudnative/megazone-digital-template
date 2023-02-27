@@ -4,4 +4,6 @@ import com.megazone.springbootbackend.model.dto.AdminDto;
 
 public interface AdminService {
     void register(AdminDto adminDto);
+
+    boolean checkId(String id);
 }

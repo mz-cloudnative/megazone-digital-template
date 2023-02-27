@@ -28,6 +28,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis' // redis
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux' // webclient 사용
+	implementation 'org.springframework.boot:spring-boot-starter-websocket' // websocket 사용
 	implementation 'org.springframework.kafka:spring-kafka' // 카프카 설정
 	implementation 'com.querydsl:querydsl-apt:5.0.0'
 	implementation 'com.querydsl:querydsl-jpa:5.0.0'
