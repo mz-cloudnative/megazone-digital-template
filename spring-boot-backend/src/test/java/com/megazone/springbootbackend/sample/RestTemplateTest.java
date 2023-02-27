@@ -34,7 +34,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @DisplayName("RestTemplate 테스트")
 class RestTemplateTest {
 
-  private static RestTemplate restTemplate;
+  private RestTemplate restTemplate;
 
   @Test
   @DisplayName("RestTemplate GET 테스트")

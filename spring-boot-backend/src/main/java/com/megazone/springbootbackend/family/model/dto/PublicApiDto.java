@@ -1,7 +1,8 @@
-package com.megazone.springbootbackend.sample.model.dto;
+package com.megazone.springbootbackend.family.model.dto;
 
 import java.util.List;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -76,6 +77,7 @@ public class PublicApiDto {
         @NoArgsConstructor
         @AllArgsConstructor
         @ToString
+        @EqualsAndHashCode
         public static class Item {
 
           private String dateKind;

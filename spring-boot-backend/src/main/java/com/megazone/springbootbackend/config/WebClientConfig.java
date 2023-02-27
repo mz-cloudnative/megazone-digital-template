@@ -42,14 +42,17 @@ public class WebClientConfig {
   @Bean(name = "webClient")
   public WebClient webClient() {
     HttpClient httpClient = HttpClient.create()
-        .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 3000)
-        .doOnConnected(
-            conn -> conn.addHandlerLast(new ReadTimeoutHandler(5))  //sec
-                .addHandlerLast(new WriteTimeoutHandler(60)) //sec
+        .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000)
+        .doOnConnected(conn -> conn
+            .addHandlerLast(new ReadTimeoutHandler(10))  //sec
+            .addHandlerLast(new WriteTimeoutHandler(60)) //sec
         );
+
     ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()
         .codecs(clientCodecConfigurer -> {
           ObjectMapper mapper = new ObjectMapper();
+          //객체에 없는 필드는 무시
+          mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
           //Object로 가져올 때 빈 문자열을 null로 처리.
           mapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
           //배열이 아닌 객체라도 List 변수에 할당 가능
@@ -60,11 +63,11 @@ public class WebClientConfig {
               .jackson2JsonEncoder(new Jackson2JsonEncoder(mapper));
           //Memory 조정: 2M (default 256KB)
 //          clientCodecConfigurer.defaultCodecs()
-//              .maxInMemorySize(2*1024*1024);
+//              .maxInMemorySize(2 * 1024 * 1024);
         })
         .build();
+
     return WebClient.builder()
-        .baseUrl("http://apis.data.go.kr/B090041/openapi/service")
         .clientConnector(new ReactorClientHttpConnector(httpClient))
         .filter(
             (req, next) -> next.exchange(
