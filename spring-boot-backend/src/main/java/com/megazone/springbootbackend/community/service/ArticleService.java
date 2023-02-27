@@ -1,5 +1,6 @@
 package com.megazone.springbootbackend.community.service;
 
+import com.megazone.springbootbackend.community.kafka.hit.ViewCountProducer;
 import com.megazone.springbootbackend.community.model.dto.ArticleResponseDto;
 import com.megazone.springbootbackend.community.model.dto.PageResponseDto;
 import com.megazone.springbootbackend.community.model.dto.SearchDto;
@@ -38,6 +39,8 @@ public class ArticleService {
 
     //private final SecurityUtil securityUtil;
 
+    private final ViewCountProducer viewCountProducer;
+
     private final AuthProvider authProvider;
 
     public List<PageResponseDto> allArticle(){
@@ -48,6 +51,8 @@ public class ArticleService {
 
     public ArticleResponseDto oneArticle(Long id) {
         Article article = articleRepository.findById(id).orElseThrow(() -> new RuntimeException("글이 없습니다."));
+        String articleId = String.valueOf(id);
+        viewCountProducer.sendViewCount(articleId);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication.getPrincipal() == "anonymousUser") {
             return ArticleResponseDto.of(article, false);

@@ -21,8 +21,8 @@ import org.springframework.stereotype.Service;
  * ======================================
  * </pre>
  ***************************************************/
-@Service
-@RequiredArgsConstructor
+//@Service
+//@RequiredArgsConstructor
 public class KafkaProducer {
 
 //  @Value(value = "${message.topic.default}")

@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-@Component
+//@Component
 //@NoArgsConstructor
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class SecurityUtil {
-
-    private final UserRepository userRepository;
+    //이제 안쓰는 클래스 !
+    //private final UserRepository userRepository;
     //private static final Logger logger = LoggerFactory.getLogger(SecurityUtil.class);
 
 //    public static Optional<String> getCurrentUsername() {

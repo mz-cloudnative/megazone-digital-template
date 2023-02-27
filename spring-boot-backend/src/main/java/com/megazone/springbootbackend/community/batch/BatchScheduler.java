@@ -1,6 +1,7 @@
 package com.megazone.springbootbackend.community.batch;
 
 import com.megazone.springbootbackend.community.batch.BatchConfig;
+import com.megazone.springbootbackend.community.repository.ArticleRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
@@ -9,15 +10,20 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 @Slf4j
 @Component
 public class BatchScheduler {
+    @Autowired
+    private ArticleRepository articleRepository;
 
     @Autowired
     private JobLauncher jobLauncher;
@@ -25,7 +31,10 @@ public class BatchScheduler {
     @Autowired
     private BatchConfig batchConfig;
 
-    @Scheduled(cron = "* * 3 * * *")
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+    @Scheduled(cron = "* * */3 * * *")
     public void runJob(){
         // job parameter 설정
         Map<String, JobParameter> confMap = new HashMap<>();
@@ -39,6 +48,20 @@ public class BatchScheduler {
                  | JobParametersInvalidException | org.springframework.batch.core.repository.JobRestartException e) {
 
             log.error(e.getMessage());
+        }
+    }
+
+    @Scheduled(cron = "0 0/3 * * * ?")
+    public void deleteViewCntCacheFromRedis() {
+        Set<String> redisKeys = redisTemplate.keys("articleViewCnt*");
+        Iterator<String> it = redisKeys.iterator();
+        while (it.hasNext()) {
+            String data = it.next();
+            Long articleId = Long.getLong(data.split("::")[1]);
+            Long viewCnt = Long.parseLong((String) redisTemplate.opsForValue().get(data));
+            articleRepository.addHit(articleId, viewCnt);
+            redisTemplate.delete(data);
+            redisTemplate.delete("article::"+articleId);
         }
     }
 }

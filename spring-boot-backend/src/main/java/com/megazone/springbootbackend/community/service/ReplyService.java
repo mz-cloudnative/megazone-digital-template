@@ -2,6 +2,7 @@ package com.megazone.springbootbackend.community.service;
 
 import com.megazone.springbootbackend.community.model.dto.ReplyCreateRequestDto;
 import com.megazone.springbootbackend.community.model.dto.ReplyDto;
+import com.megazone.springbootbackend.community.model.entity.Notification;
 import com.megazone.springbootbackend.community.model.entity.Reply;
 import com.megazone.springbootbackend.community.repository.ArticleRepository;
 import com.megazone.springbootbackend.community.repository.ReplyRepository;
@@ -23,6 +24,9 @@ public class ReplyService {
     private final UserRepository userRepository;
     private final ArticleRepository articleRepository;
 
+    //private final NotificationService notificationService;
+
+
     public List<ReplyDto> findReplyByArticleId(Long articleId){
         List<Reply> list=replyRepository.findReplyByArticleId(articleId);
         return convertNestedStructure(list);
@@ -36,6 +40,7 @@ public class ReplyService {
                         requestDto.getParentId() != null ?
                         replyRepository.findById(requestDto.getParentId()).orElseThrow(NullPointerException::new):null)
         );
+        //notificationService.createNotification(new Notification());
     }
 
     private List<ReplyDto> convertNestedStructure(List<Reply> replies){
@@ -51,6 +56,5 @@ public class ReplyService {
         });
         return result;
     }
-
 
 }

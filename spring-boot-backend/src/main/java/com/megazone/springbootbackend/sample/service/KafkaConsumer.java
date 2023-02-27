@@ -22,9 +22,9 @@ import org.springframework.stereotype.Service;
  * ======================================
  * </pre>
  ***************************************************/
-@Service
-@Slf4j
-@Getter
+//@Service
+//@Slf4j
+//@Getter
 public class KafkaConsumer {
 
 //  private ConsumerRecord<?, ?> consumerRecord = null;

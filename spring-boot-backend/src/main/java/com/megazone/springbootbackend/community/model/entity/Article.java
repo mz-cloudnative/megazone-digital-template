@@ -40,6 +40,9 @@ public class Article {
     @Column(nullable = false)
     private int boardId;
 
+    @Column
+    private int hit;
+
     @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = true)

@@ -5,6 +5,7 @@ import com.megazone.springbootbackend.community.model.entity.Token;
 import com.megazone.springbootbackend.community.repository.TokenRepository;
 import com.megazone.springbootbackend.community.repository.UserRepository;
 import com.megazone.springbootbackend.community.service.AuthService;
+import com.megazone.springbootbackend.community.service.UserSecurityService;
 import com.megazone.springbootbackend.community.util.RedisUtil;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -17,9 +18,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -48,6 +51,8 @@ public class TokenProvider implements InitializingBean {
     private AuthService authService;
     @Autowired
     private RedisUtil redisUtil;
+    @Autowired
+    private UserSecurityService userSecurityService;
 
     public TokenProvider(
             @Value("${jwt.secret}") String secret,
@@ -63,9 +68,13 @@ public class TokenProvider implements InitializingBean {
     }
 
     public TokenDto createToken(Authentication authentication) {
-        String authorities = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
+//        System.out.println(authentication.getAuthorities().toString());
+//        String authorities = authentication.getAuthorities().stream()
+//                .map(GrantedAuthority::getAuthority)
+//                .collect(Collectors.joining(",")); //여기가 문제임. authorities:"" 으로 옴 ㅠㅠㅠㅠ
+
+        UserDetails userDetails = userSecurityService.loadUserByUsername(authentication.getName());
+        String authorities = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
 
         long now = (new Date()).getTime();
         Date validity = new Date(now + this.tokenValidityInMilliseconds);

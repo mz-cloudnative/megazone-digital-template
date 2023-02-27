@@ -78,7 +78,7 @@ public class AuthController {
         Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
         Date date = Date.from(instant);
 
-        System.out.println(userRepository.findByUsername(authentication.getName()).get()==null);
+        //System.out.println(userRepository.findByUsername(authentication.getName()).get()==null);
 
         Token token = Token.builder()
                 .users(userRepository.findByUsername(authentication.getName()).get())
@@ -88,6 +88,8 @@ public class AuthController {
                 .build();
 
         tokenRepository.save(token);
+
+        logger.info("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"+authenticationToken.getAuthorities().toString());
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
