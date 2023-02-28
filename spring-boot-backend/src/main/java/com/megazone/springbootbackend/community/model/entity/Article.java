@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "article_id")
     private long articleId;
 
     @Column(nullable = false)

@@ -10,10 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 public interface ArticleRepository extends JpaRepository<Article, Long>, ArticleRepositoryCustom {
     @Transactional
     @Modifying
-    @Query("update Article a set a.hit = ?2  where a.articleId = ?1")
-    void addHit(Long articleId, Long hit);
+    @Query("update Article a set a.hit = a.hit+?2 where a.articleId = ?1")
+    void addHit(Long articleId, int hit);
 
-
-    @Query("select a.hit from Article a  where a.articleId = ?1")
+    @Query("select a.hit from Article a where a.articleId = ?1")
     Long findHit(Long articleId);
 }

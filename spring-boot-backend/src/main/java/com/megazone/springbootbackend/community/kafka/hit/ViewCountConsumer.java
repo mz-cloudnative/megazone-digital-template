@@ -24,8 +24,6 @@ public class ViewCountConsumer {
 
     @KafkaListener(topics = "${spring.kafka.topic.view-count}", groupId = "test-group", containerFactory = "kafkaListenerContainerFactory")
     public void listen(String articleId) throws Exception {
-//        //System.out.println(Long.parseLong(consumerRecord.value().toString()));
-//        //System.out.println(Long.valueOf(consumerRecord.value().toString()));
 //        Long views = redisTemplate.opsForValue().increment("articleViewCount"+ articleId);
 //        System.out.println("Article " + articleId + " has " + views + " views.");
 
@@ -33,7 +31,7 @@ public class ViewCountConsumer {
         //캐시에 값이 없으면 레포지토리에서 조회, 있으면 값을 증가
         ValueOperations valueOperations = redisTemplate.opsForValue();
 
-        Long articleId2 = Long.parseLong(articleId);
+        Long articleId2 = Long.parseLong(String.valueOf(articleId.charAt(1)));
 
         if(valueOperations.get(key)==null)
             valueOperations.set(

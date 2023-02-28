@@ -38,7 +38,7 @@ const MainNavigation = () =>{
 
   return(
       <header className={classes.header}>
-        <Link to='/'><div className={classes.logo}>Home</div></Link>
+        <Link to='/'><div className={classes.logo}>오늘도 무사히</div></Link>
         <nav>
           <ul>
             <li>{!isLogin && <Link to='/login'>Login</Link>}</li>

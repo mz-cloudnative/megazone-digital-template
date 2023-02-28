@@ -36,7 +36,7 @@ const StaringPage = () => {
       <br/>
       <h1>Hi! {testStr}</h1>
       <br/>
-      {isLogin && <p>{authCtx.userObj.nickname}님 안녕하세요</p>}
+      {isLogin && <p>{authCtx.userObj.nickname}님 오늘도 무사히 출근하시길 바랍니다.</p>}
       </section>
   );
 }
