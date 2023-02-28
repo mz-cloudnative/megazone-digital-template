@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.time.*;
 import java.util.Date;
@@ -101,9 +102,10 @@ public class AuthController {
     }
 
     @PostMapping("/user/logout")
-    public void logout(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
-        DecodedJWT decodedToken=authService.getDecodedToken(token);
+    public void logout(@RequestBody String token) {
+        //String token = response.getHeader("Authorization");
+        //String token = request.getHeader("Authorization");
+        //DecodedJWT decodedToken=authService.getDecodedToken(token);
         authService.logout(token);
         SecurityContextHolder.getContext().setAuthentication(null);
 //        그럼 이 때 리다이렉션으로 홈화면으로 이동하기

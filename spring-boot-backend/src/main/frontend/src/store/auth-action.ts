@@ -64,11 +64,11 @@ export const loginActionHandler = (username: string, password: string) => {
 };
 
 export const logoutActionHandler = (token : string) => {
-  const sObject = tokenToString;
-  console.log(token);
+  const tokenObject = token;
+  console.log("로그아웃할 때 프론트엔드단에서 찍히는 토큰입니다 : "+token);
   const URL = '/api/user/logout'
-  const response = POST(URL, token, {"Access-Control-Allow-Origin": "*"});
-  localStorage.removeItem('token');
+  const response = POST(URL, tokenObject, {"Access-Control-Allow-Origin": "*", "Authorization": token});
+  //localStorage.removeItem('token');
   localStorage.removeItem('expirationTime');
   return response;
 };

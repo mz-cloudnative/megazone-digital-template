@@ -97,9 +97,13 @@ export const AuthContextProvider:React.FC<Props> = (props) => {
   };
 
   const logoutHandler = useCallback(() => {
-    authAction.logoutActionHandler(token);
-    setToken('');
-    //setUserObj({username:'', nickname:''});
+    const token = localStorage.getItem('token');
+    console.log("나는 로그아웃핸들러왔을 때 로컬스토리지에서 뽑은 토큰입니다 "+token);
+    if(typeof token === 'string'){
+      authAction.logoutActionHandler(token);
+    }
+    // setToken('');
+    // setUserObj({username:'', nickname:''});
     if (logoutTimer) {
       clearTimeout(logoutTimer);
     }

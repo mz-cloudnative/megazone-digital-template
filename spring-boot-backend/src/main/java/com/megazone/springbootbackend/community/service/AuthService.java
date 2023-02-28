@@ -46,9 +46,6 @@ public class AuthService {
 
     public DecodedJWT getDecodedToken(String token){
         token = token.replaceAll("Bearer ", "");
-//        DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(Base64.getDecoder().decode(secret)))
-//                .build()
-//                .verify(token);
         DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(Base64.getDecoder().decode(secret)))
                 .build()
                 .verify(token);
