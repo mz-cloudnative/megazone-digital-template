@@ -24,26 +24,26 @@ const createTokenHeader = (token:string) => {
 
 export const getPageList = (param:string) => {
   const URL = '/api/user/article/page?page=' + param;
-  const response = GET(URL, {});
+  const response = GET(URL, {"Access-Control-Allow-Origin": "*"});
   return response;
 }
 
 export const getPageNoticeList = (param:string)=>{
   const URL = '/api/user/article/notice/page?page='+param;
-  const response = GET(URL, {});
+  const response = GET(URL, {"Access-Control-Allow-Origin": "*"});
   return response;
 }
 
 export const getPageBoardList = (param:string)=>{
   const URL = '/api/user/article/board/page?page='+param;
-  const response = GET(URL, {});
+  const response = GET(URL, {"Access-Control-Allow-Origin": "*"});
   return response;
 }
 
 export const getOneArticle = (param:string, token?:string) => {
   const URL= '/api/user/article/one?id=' + param;
   if (!token) {
-    const response = GET(URL, {});
+    const response = GET(URL, {"Access-Control-Allow-Origin": "*"});
     return response;
   } else {
     const response = GET(URL, createTokenHeader(token));

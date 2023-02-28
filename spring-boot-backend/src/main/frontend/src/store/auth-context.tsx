@@ -50,7 +50,7 @@ export const AuthContextProvider:React.FC<Props> = (props) => {
     const response = authAction.signupActionHandler(username, password, nickname);
     response.then((result) => {
       if (result !== null) {
-        
+        console.log(result.data);
       }
     });
     setIsSuccess(true);

@@ -7,7 +7,8 @@ const createTokenHeader = (token:string) => {
   return {
     headers: {
       //'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + token
+      'Authorization': 'Bearer ' + token,
+      "Access-Control-Allow-Origin": "*"
     }
   }
 }
@@ -31,11 +32,11 @@ export const retrieveStoredToken = () => {
   const storedExpirationDate = localStorage.getItem('expirationTime') || '0';
 
   const remaingTime = calculateRemainingTime(+ storedExpirationDate);
-  console.log("이거 언제 타는지 확인")
+  //console.log("이거 언제 타는지 확인")
   console.log(storedToken);
 
   if(remaingTime <= 10) {
-    console.log("나 혹시 여기로 오는가요")
+    //console.log("나 혹시 여기로 오는가요")
     localStorage.removeItem('token');
     localStorage.removeItem('expirationTime');
     return null
@@ -51,14 +52,14 @@ export const signupActionHandler = (username: string, password: string, nickname
   const URL = '/api/signup'
   const signupObject = { username, password, nickname };
   
-  const response = POST(URL, signupObject, {});
+  const response = POST(URL, signupObject, {"Access-Control-Allow-Origin": "*"});
   return response;
 };
 
 export const loginActionHandler = (username: string, password: string) => {
   const URL = '/api/login'
   const loginObject = { username, password };
-  const response = POST(URL, loginObject, {});
+  const response = POST(URL, loginObject, {"Access-Control-Allow-Origin": "*"});
   return response;
 };
 
@@ -66,7 +67,7 @@ export const logoutActionHandler = (token : string) => {
   const sObject = tokenToString;
   console.log(token);
   const URL = '/api/user/logout'
-  const response = POST(URL, token, token);
+  const response = POST(URL, token, {"Access-Control-Allow-Origin": "*"});
   localStorage.removeItem('token');
   localStorage.removeItem('expirationTime');
   return response;

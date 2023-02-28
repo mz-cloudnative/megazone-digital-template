@@ -58,13 +58,9 @@ public class BatchScheduler {
         while (it.hasNext()) {
             String data = it.next();
 
-            System.out.println(data);
-            System.out.println(data.split("::")[1]);
-            System.out.println(String.valueOf(data.split("::")[1].charAt(1)));
-
             Long articleId = Long.parseLong(String.valueOf(data.split("::")[1].charAt(1)));
             int viewCnt = Integer.parseInt((String) redisTemplate.opsForValue().get(data));
-            System.out.println(viewCnt);
+
             articleRepository.addHit(articleId, viewCnt);
             redisTemplate.delete(data);
             redisTemplate.delete("article::"+articleId);
