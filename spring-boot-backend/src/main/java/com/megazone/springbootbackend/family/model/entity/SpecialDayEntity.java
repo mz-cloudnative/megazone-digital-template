@@ -1,7 +1,7 @@
 package com.megazone.springbootbackend.family.model.entity;
 
-import com.megazone.springbootbackend.family.model.domain.Event;
 import com.megazone.springbootbackend.family.model.domain.Family;
+import com.megazone.springbootbackend.family.model.domain.SpecialDay;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,8 +23,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @Getter
-@Table(name = "event")
-public class EventEntity {
+@Table(name = "special_day")
+public class SpecialDayEntity extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -43,20 +43,20 @@ public class EventEntity {
   @JoinColumn(name = "family_id", nullable = false)
   private FamilyEntity family;
 
-  public static EventEntity fromDomainEntity(Event event) {
-    return EventEntity.builder()
-        .id(event.getId())
-        .name(event.getName())
-        .startDateTime(event.getStartDateTime())
-        .endDateTime(event.getEndDateTime())
-        .alarm(event.getAlarm())
-        .alarmDateTime(event.getAlarmDateTime())
-        .family(FamilyEntity.fromDomainEntity(event.getFamily()))
+  public static SpecialDayEntity fromDomainEntity(SpecialDay specialDay) {
+    return SpecialDayEntity.builder()
+        .id(specialDay.getId())
+        .name(specialDay.getName())
+        .startDateTime(specialDay.getStartDateTime())
+        .endDateTime(specialDay.getEndDateTime())
+        .alarm(specialDay.getAlarm())
+        .alarmDateTime(specialDay.getAlarmDateTime())
+        .family(FamilyEntity.fromDomainEntity(specialDay.getFamily()))
         .build();
   }
 
-  public Event toDomainEntity() {
-    return Event.builder()
+  public SpecialDay toDomainEntity() {
+    return SpecialDay.builder()
         .id(this.id)
         .name(this.name)
         .startDateTime(this.startDateTime)

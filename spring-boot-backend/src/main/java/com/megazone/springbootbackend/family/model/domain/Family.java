@@ -13,6 +13,6 @@ public class Family {
   private Long id;
   private String name;
   private Long memberId;
+  private List<SpecialDay> specialDay;
 
-  private List<Event> event;
 }

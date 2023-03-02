@@ -1,6 +1,6 @@
 package com.megazone.springbootbackend.family.repository;
 
-import com.megazone.springbootbackend.family.model.entity.EventEntity;
+import com.megazone.springbootbackend.family.model.entity.SpecialDayEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /***************************************************
@@ -19,6 +19,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * ======================================
  * </pre>
  ***************************************************/
-public interface EventRepository extends JpaRepository<EventEntity, Long> {
+public interface EventRepository extends JpaRepository<SpecialDayEntity, Long> {
 
 }

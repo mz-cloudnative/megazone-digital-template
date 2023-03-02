@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Getter
 @Table(name = "family")
-public class FamilyEntity {
+public class FamilyEntity extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -36,10 +36,10 @@ public class FamilyEntity {
 
   //@JsonManagedReference
   @OneToMany(mappedBy = "family", cascade = CascadeType.ALL)
-  private List<EventEntity> event;
+  private List<SpecialDayEntity> event;
 
   @Builder
-  public FamilyEntity(Long id, String name, Long memberId, List<EventEntity> event) {
+  public FamilyEntity(Long id, String name, Long memberId, List<SpecialDayEntity> event) {
     this.id = id;
     this.name = name;
     this.memberId = memberId;
@@ -59,9 +59,9 @@ public class FamilyEntity {
         .id(this.id)
         .name(this.name)
         .memberId(this.memberId)
-        .event(
+        .specialDay(
             this.event != null ? this.event.stream()
-                .map(EventEntity::toDomainEntity)
+                .map(SpecialDayEntity::toDomainEntity)
                 .collect(Collectors.toList()) : Collections.emptyList()
         )
         .build();
