@@ -7,7 +7,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
@@ -34,6 +36,7 @@ import reactor.test.StepVerifier;
  * </pre>
  ***************************************************/
 @RestClientTest
+@MockBean(JpaMetamodelMappingContext.class)
 @Import({WebClientConfig.class})
 @DisplayName("WebClient 테스트")
 class WebClientTest {

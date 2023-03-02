@@ -55,11 +55,19 @@ public class ContainerBase {
       }
       if (ContainerKind.POSTGRES_SQL.getImage().equals(container.getDockerImageName())) {
         PostgreSQLContainer postgreSQLContainer = (PostgreSQLContainer) container;
+        //Master
         registry.add("spring.datasource.master.hikari.jdbc-url",
             postgreSQLContainer::getJdbcUrl);
         registry.add("spring.datasource.master.hikari.username",
             postgreSQLContainer::getUsername);
         registry.add("spring.datasource.master.hikari.password",
+            postgreSQLContainer::getPassword);
+        //Slave
+        registry.add("spring.datasource.slave.hikari.jdbc-url",
+            postgreSQLContainer::getJdbcUrl);
+        registry.add("spring.datasource.slave.hikari.username",
+            postgreSQLContainer::getUsername);
+        registry.add("spring.datasource.slave.hikari.password",
             postgreSQLContainer::getPassword);
       }
       if (ContainerKind.REDIS.getImage().equals(container.getDockerImageName())) {

@@ -58,7 +58,11 @@ class SampleJpaTest {
   SampleCustomRepository sampleCustomRepository;
 
   @Container
-  static final GenericContainer<?> POSTGRES_SQL_CONTAINER =
+  static final GenericContainer<?> POSTGRES_SQL_CONTAINER_MASTER =
+      ContainerBase.containerCreate(ContainerKind.POSTGRES_SQL);
+
+  @Container
+  static final GenericContainer<?> POSTGRES_SQL_CONTAINER_SLAVE =
       ContainerBase.containerCreate(ContainerKind.POSTGRES_SQL);
 
   /**
@@ -70,7 +74,7 @@ class SampleJpaTest {
   @DynamicPropertySource
   static void init(DynamicPropertyRegistry registry) {
     ContainerBase.overrideProps(registry
-        , List.of(POSTGRES_SQL_CONTAINER));
+        , List.of(POSTGRES_SQL_CONTAINER_MASTER, POSTGRES_SQL_CONTAINER_SLAVE));
   }
 
   @BeforeEach
@@ -96,6 +100,7 @@ class SampleJpaTest {
 
   @Test
   @DisplayName("샘플 이름 조회 테스트")
+    //@Transactional(readOnly = true) //이중화 테스트를 위해선 DB Replica 구성이 필요..
   void getName_test() {
     final var sampleData = sampleCustomRepository.findAllByName("test1");
 
@@ -104,6 +109,7 @@ class SampleJpaTest {
 
   @Test
   @DisplayName("샘플 조회 목록 테스트")
+    //@Transactional(readOnly = true) //이중화 테스트를 위해선 DB Replica 구성이 필요..
   void sampleList_test() {
     final var sampleData = sampleRepository.findAll().stream()
         .map(SampleDataResponse::entityToResponse)
