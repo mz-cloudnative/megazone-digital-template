@@ -24,5 +24,4 @@ public class ReplyRepositoryImpl implements ReplyRepositoryCustom {
                         reply.replyId.asc()
                 ).fetch();
     }
-
 }

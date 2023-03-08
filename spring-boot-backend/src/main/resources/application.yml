@@ -1,6 +1,7 @@
 server:
   port: 8080
 
+
 spring:
   application:
     name: spring-boot-backend
@@ -98,3 +99,12 @@ jwt:
   header: Authorization
   secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
   token-validity-in-seconds: 900
+
+eureka:
+  instance:
+    hostname: 127.0.0.1
+  client:
+    service-url:
+      default-zone: http://${eureka.instance.hostname}:${server.port}/eureka/
+    register-with-eureka: false
+    fetch-registry: false

@@ -6,14 +6,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.megazone.springbootbackend.community.model.dto.TrainDTO;
 import io.swagger.v3.core.util.Json;
 import org.springframework.data.keyvalue.core.event.KeyValueEvent;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.web.util.UriBuilder;
@@ -59,31 +61,44 @@ public class HomeService {
     }
 
     public String getCongestionTrain(String trainY){
+//        String result= webClient.get()
+//                //.uri("https://apis.openapi.sk.com/puzzle/congestion-train/rltm/trains/{subwayLine}/{trainY}")
+////                .uri(uriBuilder -> uriBuilder.path("https://apis.openapi.sk.com/puzzle/congestion-train/rltm/trains/{subwayLine}/{trainY}")
+////                        .build(subwayLine,trainY))
+////                .uri(uriBuilder -> uriBuilder
+////                        .path("https://apis.openapi.sk.com/puzzle/congestion-train/rltm/trains/2/{trainY}")
+////                        .build(trainY)
+////                    )
+//                .uri("https://apis.openapi.sk.com/puzzle/congestion-train/rltm/trains/2/"+trainY)
+//                //.uri(uriBuilder -> uriBuilder.path("https://apis.openapi.sk.com/puzzle/congestion-train/rltm/trains/2/"+trainY)
+//                //        .queryParams(queryParams)
+//                //        .build())
+//                //curl --request GET \
+//                //     --url https://apis.openapi.sk.com/puzzle/congestion-train/rltm/trains/2/2303 \
+//                //     --header 'accept: application/json' \
+//                //     --header 'appkey: 8qF71PnoCK2KsI1X7LybH8ZMJWRnYP7n1a0mGyLW'
+//
+//
+//                .header(HttpHeaders.ACCEPT,  MediaType.APPLICATION_JSON_VALUE)
+//                .header("appkey","8qF71PnoCK2KsI1X7LybH8ZMJWRnYP7n1a0mGyLW")
+//                .retrieve()
+//                .bodyToMono(String.class);
+        RestTemplate restTemplate = new RestTemplate();
 
-        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-        queryParams.add("appkey", "8qF71PnoCK2KsI1X7LybH8ZMJWRnYP7n1a0mGyLW");
-        queryParams.add("trainY", trainY);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.set("accept", MediaType.APPLICATION_JSON_VALUE);
+        httpHeaders.set("appkey", "8qF71PnoCK2KsI1X7LybH8ZMJWRnYP7n1a0mGyLW");
 
-        String result= webClient.get()
-                //.uri("https://apis.openapi.sk.com/puzzle/congestion-train/rltm/trains/{subwayLine}/{trainY}")
-//                .uri(uriBuilder -> uriBuilder.path("https://apis.openapi.sk.com/puzzle/congestion-train/rltm/trains/{subwayLine}/{trainY}")
-//                        .build(subwayLine,trainY))
-//                .uri(uriBuilder -> uriBuilder
-//                        .path("https://apis.openapi.sk.com/puzzle/congestion-train/rltm/trains/2/{trainY}")
-//                        .build(trainY)
-//                    )
-                .uri("https://apis.openapi.sk.com/puzzle/congestion-train/rltm/trains/2/{trainY}",trainY)
-                //.uri(uriBuilder -> uriBuilder.path("https://apis.openapi.sk.com/puzzle/congestion-train/rltm/trains/2/"+trainY)
-                //        .queryParams(queryParams)
-                //        .build())
-                .accept(MediaType.APPLICATION_JSON)
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
+        HttpEntity request = new HttpEntity(httpHeaders);
 
+        ResponseEntity<String> responseEntity = null;
+        try {
+            responseEntity = restTemplate.exchange("https://apis.openapi.sk.com/puzzle/congestion-train/rltm/trains/2/"+trainY, HttpMethod.GET, request, String.class);
+        } catch (RestClientException e) {
+            e.printStackTrace();
+        }
 
-
-        return result;
+        return responseEntity.toString();
     }
 
 

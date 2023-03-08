@@ -17,8 +17,16 @@ type PostArticle = {
   content: string
 }
 
+type ReplyInfo = {
+
+};
+
+type PostReply = {
+
+};
+
 export const LOGIN_USER = "LOGIN_USER"
 export const LOGOUT_USER = "LOGOUT_USER"
 export const LOGIN_ADMIN = "LOGIN_ADMIN"
 
-export type { ChildProps, ArticleInfo, PostArticle };
+export type { ChildProps, ArticleInfo, PostArticle, ReplyInfo, PostReply };
