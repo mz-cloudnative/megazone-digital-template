@@ -2,11 +2,11 @@ package com.megazone.springbootbackend.family.service;
 
 import com.megazone.springbootbackend.family.model.dto.PublicApiDto.Response.Body.Items.Item;
 import java.util.Comparator;
+import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
-import reactor.core.scheduler.Schedulers;
 
 /***************************************************
  * <ul>
@@ -32,34 +32,28 @@ public class AsyncService {
 
   private final SpecialDayService specialDayService;
 
-  //@Async("getAsyncExecutor") //webClient 사용시 불필요. RestTemplate + Async 형태로 사용해야 Webclient와 동일.
   public Flux<Item> getAll(int year) {
-    return Flux.range(1, 12)
-        .parallel()
-        .runOn(Schedulers.boundedElastic())
-        .flatMap(month -> getSpecialDays(year, month))
-        .sequential()
-        .sort(Comparator.comparingInt(Item::getLocdate))
+
+    return Flux.fromArray(IntStream.rangeClosed(1, 12).boxed().toArray(Integer[]::new))
+        .flatMapSequential(month -> getSpecialDays(year, month))
         .distinct()
-        .onErrorContinue((throwable, o) -> log.error("Item error: {}", throwable.toString()));
+        .sort(Comparator.comparingInt(Item::getLocdate))
+        .doOnError(throwable -> log.error("result error: {}", throwable.toString()));
   }
 
   private Flux<Item> getSpecialDays(int year, int month) {
-    Flux<Item> specialDayFlux = Flux.empty();
-
-    specialDayFlux = specialDayFlux.concatWith(getSpecialDayInfo(year, month, "getHoliDeInfo"));
-    specialDayFlux = specialDayFlux.concatWith(getSpecialDayInfo(year, month, "getRestDeInfo"));
-    specialDayFlux = specialDayFlux.concatWith(getSpecialDayInfo(year, month, "getAnniversaryInfo"));
-    specialDayFlux = specialDayFlux.concatWith(getSpecialDayInfo(year, month, "get24DivisionsInfo"));
-    specialDayFlux = specialDayFlux.concatWith(getSpecialDayInfo(year, month, "getSundryDayInfo"));
-
-    return specialDayFlux;
+    return Flux.concat(
+            getSpecialDayInfo(year, month, "getHoliDeInfo")
+            , getSpecialDayInfo(year, month, "getRestDeInfo")
+            , getSpecialDayInfo(year, month, "getAnniversaryInfo")
+            , getSpecialDayInfo(year, month, "get24DivisionsInfo")
+            , getSpecialDayInfo(year, month, "getSundryDayInfo"))
+        .onErrorResume(throwable -> Flux.empty());
   }
 
-  private Flux<Item> getSpecialDayInfo(int year, int month, String apiName) {
-    return specialDayService.getSpecialDayInfo(year, month, apiName)
-        .flatMap(publicApiDto -> Flux.fromIterable(
-            publicApiDto.getResponse().getBody().getItems().getItem()))
+  private Flux<Item> getSpecialDayInfo(int year, int month, String apiPath) {
+    return specialDayService.getSpecialDayInfo(year, month, apiPath)
+        .flatMapIterable(publicApiDto -> publicApiDto.getResponse().getBody().getItems().getItem())
         .onErrorContinue((throwable, o) -> log.error("Item error: {}", throwable.toString()));
   }
 

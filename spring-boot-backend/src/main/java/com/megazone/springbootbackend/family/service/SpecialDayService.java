@@ -36,7 +36,7 @@ public class SpecialDayService {
 
   private final WebClient webClient;
 
-  public Flux<PublicApiDto> getSpecialDayInfo(int year, int month, String type) {
+  public Flux<PublicApiDto> getSpecialDayInfo(int year, int month, String apiPath) {
     MultiValueMap<String, String> valueMap = new LinkedMultiValueMap<>();
     valueMap.setAll(
         Map.of(
@@ -53,7 +53,7 @@ public class SpecialDayService {
         .build()
         .get()
         .uri(uriBuilder ->
-            uriBuilder.path("/" + type)
+            uriBuilder.path("/" + apiPath)
                 .queryParams(valueMap)
                 .build()
         )
@@ -78,6 +78,7 @@ public class SpecialDayService {
         )
         .bodyToFlux(PublicApiDto.class)
         .retry(2)
-        .onErrorContinue((throwable, o) -> log.error("PublicApi Call error: {}", throwable.toString()));
+        .onErrorContinue(
+            (throwable, o) -> log.error("PublicApi Call error: {}", throwable.toString()));
   }
 }
