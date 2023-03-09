@@ -3,6 +3,7 @@ package com.megazone.springbootbackend.moim.controller;
 import com.megazone.springbootbackend.moim.service.CommonFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,5 +23,9 @@ public class MoimEventController {
   public String eventGeneric(@RequestParam String message, @RequestParam boolean success) {
     commonFacade.genericType(message,success);
     return "gggggooood~~";
+  }
+  @PostMapping("/event/slack")
+  public void slackAlarmTest(@RequestParam String message) {
+    commonFacade.sendMessage(message);
   }
 }

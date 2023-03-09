@@ -74,10 +74,23 @@ dependencies {
 	//object 간 변환 처리
 	implementation 'org.modelmapper:modelmapper:3.1.1'
 
+    // feign Client
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
     //TestContainers 관련(단위테스트)
     testImplementation("org.testcontainers:junit-jupiter:1.17.6")
     testImplementation("org.testcontainers:postgresql:1.17.6")
     testImplementation("org.testcontainers:kafka:1.17.6")
+}
+
+ext {
+    set('springCloudVersion', "2021.0.5")
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
 }
 
 // QueryDSL 추가

@@ -5,9 +5,11 @@ import com.megazone.springbootbackend.moim.model.dto.MoimResponse;
 import com.megazone.springbootbackend.moim.model.entity.MoimEntity;
 import com.megazone.springbootbackend.moim.repository.MoimRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class MoimService {
 
@@ -26,6 +28,7 @@ public class MoimService {
   }
 
   public void sendToEmail(String moimName, String administrator) {
-    System.out.println("send Email~~");
+    System.out.println(String.format("send Email~~ 모임 이름[%s], 개설자[%s]", moimName, administrator));
   }
+
 }

@@ -73,6 +73,10 @@ spring:
     topics:
       example: loc-topic-create3,loc-topic-create4,loc-topic-create5
 
+external:
+  slack:
+    url: https://hooks.slack.com/services/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
+
 message:
   topic:
     default: "test-topic"
