@@ -73,7 +73,8 @@ public class RedisCacheConfig {
   }
 
   private Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer() {
-    Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
+    Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(
+        Object.class);
     ObjectMapper objectMapper = objectMapper();
     objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     jackson2JsonRedisSerializer.setObjectMapper(objectMapper);
@@ -84,8 +85,10 @@ public class RedisCacheConfig {
     return RedisCacheConfiguration
         .defaultCacheConfig()
         .disableCachingNullValues() //Null 값 캐싱하지 않기
-        .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())) // key Serializer 변경
-        .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer()))// Value Serializer 변경
+        .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(
+            new StringRedisSerializer())) // key Serializer 변경
+        .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(
+            jackson2JsonRedisSerializer()))// Value Serializer 변경
         .entryTtl(cacheProperties.getRedis().getTimeToLive()); //기본 유효시간
   }
 
@@ -101,7 +104,7 @@ public class RedisCacheConfig {
 
   @Bean
   public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
-    //@Cacheable @CacheEvict @CachePut 어노테이션 사용으로 캐싱 처리할 때 사용되는 설정
+    //@Cacheable @CacheEvict @CachePut 어노테이션으로 캐싱 처리할 때 사용되는 설정
     return RedisCacheManager.RedisCacheManagerBuilder
         .fromConnectionFactory(redisConnectionFactory)
         .cacheDefaults(redisCacheDefaultConfiguration())

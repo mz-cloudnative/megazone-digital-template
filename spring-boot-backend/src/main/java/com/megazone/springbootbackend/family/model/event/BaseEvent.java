@@ -10,7 +10,7 @@ import lombok.Getter;
  * <li>파  일  명 : BaseEvent</li>
  * <li>작  성  자 : mz01-ohyunbk</li>
  * <li>작  성  일 : 2023/02/27</li>
- * <li>설     명 : </li>
+ * <li>설     명 : 이벤트 발행시간</li>
  * </ul>
  * <pre>
  * ======================================

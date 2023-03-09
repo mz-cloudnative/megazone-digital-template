@@ -71,6 +71,8 @@ dependencies {
     testImplementation("org.testcontainers:junit-jupiter:${testContainersVersion}")
     testImplementation("org.testcontainers:postgresql:${testContainersVersion}")
     testImplementation("org.testcontainers:kafka:${testContainersVersion}")
+    //testImplementation("org.testcontainers:localstack") //LocalStack은 AWS 서비스를 테스트하기 위한 용도.
+
 
     annotationProcessor "org.mapstruct:mapstruct-processor:1.5.3.Final"
     annotationProcessor "org.projectlombok:lombok:1.18.24"

@@ -21,6 +21,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -46,8 +47,8 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @ComponentScan(basePackageClasses = {
     SampleRepository.class, SampleCustomRepository.class
 }) //테스트에 필요한 컴포넌트 직접 설정
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 //embeded h2를 사용하지 않고 postgresSQL Testcontainers를 사용하기 위한 설정.
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Testcontainers
 class SampleJpaTest {
 
@@ -98,18 +99,26 @@ class SampleJpaTest {
     );
   }
 
+  // 이중화 테스트를 위해선 DB Replica 구성이 필요...(현재 Replica 구성이 되질 않아서 slave에는 데이터가 없는 상태)
   @Test
-  @DisplayName("샘플 이름 조회 테스트")
-    //@Transactional(readOnly = true) //이중화 테스트를 위해선 DB Replica 구성이 필요..
-  void getName_test() {
+  @DisplayName("Slave 샘플 이름 조회 실패 테스트")
+  @Transactional(readOnly = true)
+  void getName_slave_test() {
+    final var sampleData = sampleCustomRepository.findAllByName("test1");
+
+    Assertions.assertThat(sampleData).isNull();
+  }
+
+  @Test
+  @DisplayName("Master 샘플 이름 조회 성공 테스트")
+  void getName_master_test() {
     final var sampleData = sampleCustomRepository.findAllByName("test1");
 
     Assertions.assertThat(sampleData).isNotNull();
   }
 
   @Test
-  @DisplayName("샘플 조회 목록 테스트")
-    //@Transactional(readOnly = true) //이중화 테스트를 위해선 DB Replica 구성이 필요..
+  @DisplayName("Master 샘플 조회 목록 테스트")
   void sampleList_test() {
     final var sampleData = sampleRepository.findAll().stream()
         .map(SampleDataResponse::entityToResponse)

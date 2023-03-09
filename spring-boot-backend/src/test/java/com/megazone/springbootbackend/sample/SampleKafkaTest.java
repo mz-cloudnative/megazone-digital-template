@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -39,6 +40,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 @SpringBootTest
 @TestMethodOrder(value = MethodOrderer.OrderAnnotation.class) //@Order에 의해 메소드별 실행순서 보장
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DisplayName("Kafka 테스트")
 class SampleKafkaTest {
 

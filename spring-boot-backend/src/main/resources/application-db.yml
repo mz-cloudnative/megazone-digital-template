@@ -47,16 +47,6 @@ spring:
     console:
       enabled: false
 
-  jpa:
-    database: POSTGRESQL
-    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
-    show-sql: true
-    hibernate:
-      ddl-auto: create
-    properties:
-      hibernate:
-        format_sql: true
-
   datasource:
     master:
       hikari:
@@ -77,16 +67,36 @@ spring:
         connectionTestQuery: "SELECT 1"
         maximumPoolSize: 50
         minimumIdle: 50
-
+  # flyway: DB 형상관리를 위한 툴
+  # prod 환경에서 JPA ddl-auto의 옵션으로 인한 스키마 변경은 DB 데이터의 큰 영향을 줄 수 있으므로,
+  # DB에 직접 접속하여 스키마 변경을 하는 것이 안전하다. 하지만 이렇게 되면 스키마의 변경 이력을 파악하기가 어려우므로
+  # flyway 마이그레이션 스크립트를 작성하여 관리를 하면 스크립트 파일과 이력 테이블을 통해 스키마의 이력을 한눈에 확인하는데 용이하다.
   flyway:
-    locations: classpath:db/migration,classpath:db/seed
-    enabled: false
-    baseline-on-migrate: true
-    url: jdbc:postgresql://localhost:5432/example
+    locations: classpath:db/migration,classpath:db/seed #스크립트 파일 위치
+    enabled: false #사용 여부
+    baseline-on-migrate: true #이력테이블 생성. 기존에 존재하는 경우엔 false.
+    url: jdbc:postgresql://localhost:5432/sample
     user: postgres
     password: 1234
-    #out-of-order: true
-    #validate-on-migrate: true
+  jpa:
+    database: POSTGRESQL
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+  #    defer-datasource-initialization: true #Spring Boot schema.sql, data.sql을 사용하는 경우에만 활성화처리
+
+# flyway를 단순 DB 초기화 용도로 사용하는 경우엔 아래와 같이 Spring Boot의 schema.sql, data.sql로 대체가 가능.
+#  sql:
+#    init:
+#      mode: ALWAYS
+#      schema-locations:
+#        - classpath:db/migration/schema.sql
+#      data-locations:
+#        - classpath:db/seed/data.sql
 --- #dev 설정
 spring:
   config:
@@ -131,8 +141,6 @@ spring:
     locations: classpath:db/migration,classpath:db/seed
     enabled: false
     baseline-on-migrate: true
-    url: jdbc:postgresql://localhost:5432/example
+    url: jdbc:postgresql://localhost:5432/sample
     user: postgres
     password: 1234
-    #out-of-order: true
-    #validate-on-migrate: true    org.hibernate.type: trace

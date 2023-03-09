@@ -32,8 +32,14 @@ public class AsyncService {
 
   private final SpecialDayService specialDayService;
 
+  /**
+   * @param year: 연도
+   * @return Item
+   * @apiNote 연도에 해당하는 공휴일, 휴무일, 24절기, 잡절 등을 1~12월을 각각 호출 후 중복제거와 날짜별 정렬을 하여 리턴한다.
+   * @author mz01-ohyunbk
+   * @since 2023/03/09 1:55 PM
+   */
   public Flux<Item> getAll(int year) {
-
     return Flux.fromArray(IntStream.rangeClosed(1, 12).boxed().toArray(Integer[]::new))
         .flatMapSequential(month -> getSpecialDays(year, month))
         .distinct()
@@ -41,6 +47,14 @@ public class AsyncService {
         .doOnError(throwable -> log.error("result error: {}", throwable.toString()));
   }
 
+  /**
+   * @param year:  연도
+   * @param month: 월
+   * @return Item
+   * @apiNote 각 API를 월별로 호출 후 결과값을 리턴
+   * @author mz01-ohyunbk
+   * @since 2023/03/09 1:57 PM
+   */
   private Flux<Item> getSpecialDays(int year, int month) {
     return Flux.concat(
             getSpecialDayInfo(year, month, "getHoliDeInfo")
@@ -51,6 +65,15 @@ public class AsyncService {
         .onErrorResume(throwable -> Flux.empty());
   }
 
+  /**
+   * @param year:    연도
+   * @param month:   월
+   * @param apiPath: 호출 API
+   * @return Item
+   * @apiNote apiPath에 해당하는 API를 호출 후 결과값을 리턴
+   * @author mz01-ohyunbk
+   * @since 2023/03/09 1:58 PM
+   */
   private Flux<Item> getSpecialDayInfo(int year, int month, String apiPath) {
     return specialDayService.getSpecialDayInfo(year, month, apiPath)
         .flatMapIterable(publicApiDto -> publicApiDto.getResponse().getBody().getItems().getItem())
